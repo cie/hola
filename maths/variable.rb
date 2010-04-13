@@ -1,23 +1,32 @@
-require '../expr/expr.rb'
-require '../parser/parser.rb'
+require 'expr/expr.rb'
+require 'parser/parser.rb'
 
 class VariableExpr < NullaryExpr
-    def initialize val
-        @val = val
+    def initialize name
+        @name = name
     end
+    attr_reader :name
 
     def to_s
-        @val.to_s
+        @name
     end
 
     def inspect
-        %{##{@val}}
+        %{#{@name}}
+    end
+
+    def == other
+        other.is_a?(self.class) && @name == other.name
+    end
+
+    def self.grammar parser
+        parser.token(/[a-zA-Z]+/) {|m| VariableExpr.new m }
+        parser.operator 100 do
+            match(VariableExpr) { |a| a }
+        end
     end
 end
 
-Parser.rule 20 do |c,n|
-    match /[a-zA-Z]+/ { |x| VariableExpr.new(x) }
-end
 
 
 

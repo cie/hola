@@ -1,6 +1,8 @@
 
 class Expr
-
+    def canonize
+        self
+    end
 end
 
 class NullaryExpr < Expr
