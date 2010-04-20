@@ -1,19 +1,10 @@
 
 class EquationExpr < BinaryExpr
-    def initialize a,b
-        @a = a
-        @b = b
+    def initialize a,b,stands
+        super a,b
+        @stands = stands
     end
-
-    attr_reader :a, :b
-
-    def to_s
-        "#{@a} = #{@b}"
-    end
-
-    def == other
-        other.is_a?(self.class) && @a == other.a && @b == other.b
-    end
+    attr_reader :stands
 
     def self.grammar parser
         parser.token(/\=/) {|x|x}
@@ -22,6 +13,19 @@ class EquationExpr < BinaryExpr
             match(lower, '=', lower) {|a,_,b| EquationExpr.new a,b}
         end
     end
+
+    # --- new ---
+
+    def to_s
+        "#{@a}#{operator}#{@b}"
+    end
+
+
+    grammar do
+        binary_operator(30, '==') {|a,b| EquationExpr.new a,b,true}
+        binary_operator(30, '!=') {|a,b| EquationExpr.new a,b,false}
+    end
+
             
 end
 

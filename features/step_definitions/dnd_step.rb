@@ -13,7 +13,7 @@ When /^a kijelölt részt oda húzom, ahol most az? (.*) van$/ do |a|
 end
 
 Then /^(.*) lesz az egyenlet\.$/ do |a|
-  pending # express the regexp above with the code you wish you had
+  @result.should == a
 end
 
 When /^a kijelölt részt ([a-záéíóöőúüű]+) ([a-záéíóöőúüű]+) húzom attól, ahol most az? (.*) van$/ do |len,dir,a|

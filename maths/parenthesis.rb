@@ -1,4 +1,3 @@
-
 class ParenthesisExpr < UnaryExpr
     def initialize val
         @val = val
@@ -9,10 +8,6 @@ class ParenthesisExpr < UnaryExpr
         %{(#{@val})}
     end
 
-    def == other
-        other.is_a?(self.class) && @val == other.val
-    end
-
     def self.grammar parser
         parser.token(/\(/) { |m| m }
         parser.token(/\)/) { |m| m }
@@ -20,6 +15,15 @@ class ParenthesisExpr < UnaryExpr
             match("(", expr, ")") { |_,x,_| ParenthesisExpr.new(x) }
         end
     end
+
+    # --- new --- 
+    grammar do
+        operator "(", ")"
+        priority 100 do
+            match("(", expr, ")") { |_,x,_| ParenthesisExpr.new(x) }
+        end
+    end
+        
 end
 
 

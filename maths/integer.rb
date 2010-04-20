@@ -1,6 +1,3 @@
-require 'expr/expr.rb'
-require 'parser/parser.rb'
-
 class IntegerExpr < NullaryExpr
     def initialize val
         @val = val
@@ -12,17 +9,13 @@ class IntegerExpr < NullaryExpr
     end
 
     def inspect
-        %{##{@val}}
+        %{#{@val}}
     end
 
-    def == other
-        other.is_a?(self.class) && @val == other.val
-    end
-
-    def self.grammar parser
-        parser.token(/\d+/) {|m| IntegerExpr.new m.to_i }
-        parser.operator 100 do 
-            match(IntegerExpr) { |a| a }
+    grammar do
+        token(/\d+/) {|m| IntegerExpr.new m.to_i }
+        priority 100 do 
+            match(IntegerExpr)
         end
     end
 

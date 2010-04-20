@@ -15,3 +15,5 @@ Feature: Drag and Drop
         And a kijelölt részt kicsit balra húzom attól, ahol most a 10 van
         Then x=a-10 lesz az egyenlet. 
 
+    Scenario: 
+

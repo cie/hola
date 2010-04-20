@@ -44,6 +44,36 @@ class Parser < RDParser
         "o#{@i+1}".to_sym
     end
 
+    def operator *args
+        args.each do |o|
+            token(Regexp.new(Regexp.escape(o))) {|x|x}
+        end
+    end
+
+    def binary_operator p, o, &block
+        operator o
+        priority p do
+            match(higher, o, higher) {|a,_,b| yield a,b}
+        end
+    end
+
+    def prefix_operator p, o, &block
+        operator o
+        priority p do
+            match(p, higher) {|_,b| yield b}
+        end
+    end
+
+    def nary_operator p, o, clazz, &block
+        block ||= lambda {|x|x}
+        operator o
+        priority p do
+            match(same, o, higher) { |a,_,b| a.is_a?(clazz) ? a << yield b : clazz.new([yield a, yield b]) }
+        end
+    end
+            
+
+
 end
 
 
