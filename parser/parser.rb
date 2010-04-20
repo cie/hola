@@ -5,43 +5,58 @@ class Parser < RDParser
 
     def initialize *exprclasses
         super() {}
-        @operators = {}
+        @priorities = {}
 
-        exprclasses.each {|x| x.grammar(self)}
-
-        token(/\s+/) # ignore whitespace
-
-        @operators.keys.sort.each_with_index do |prec,i|
-            @i = i
-            rule same do
-                @operators[prec].each do |block|
-                    instance_eval &block
-                end
-                match(lower) if i < @operators.size-1
+        # execute grammars
+        exprclasses.each do |x|
+            if x.grammar.arity.zero?
+                instance_exec &x.grammar
+            else
+                instance_exec x, &x.grammar
             end
         end
+
+        # ignore whitespace
+        token(/\s+/) 
+
+        # execute priorites
+        @priorities.keys.sort.each_with_index do |p,i|
+            @i = i
+            rule same do
+                @priorities[p].each do |block|
+                    instance_eval &block
+                end
+                match(higher) unless i == @priorities.size-1
+            end
+        end
+        
+        # set root rule
         @start = @rules[expr]
     end
 
-    def operator prec, &block
-        @operators[prec] ||= []
-        @operators[prec] << block
+    def priority p, &block
+        @priorities[p] ||= []
+        @priorities[p] << block
     end
 
     def token pattern, &block
         super
     end
 
+    def level i
+        "l#{i}".to_sym
+    end
+
     def expr
-        :o0
+        level 0
     end
 
     def same
-        "o#{@i}".to_sym
+        level @i
     end
 
-    def lower
-        "o#{@i+1}".to_sym
+    def higher
+        level @i+1
     end
 
     def operator *args
@@ -53,22 +68,21 @@ class Parser < RDParser
     def binary_operator p, o, &block
         operator o
         priority p do
-            match(higher, o, higher) {|a,_,b| yield a,b}
+            match(higher, o, higher) {|a,_,b| block.call a,b}
         end
     end
 
     def prefix_operator p, o, &block
         operator o
         priority p do
-            match(p, higher) {|_,b| yield b}
+            match(o, higher) {|_,b| block.call b}
         end
     end
 
     def nary_operator p, o, clazz, &block
-        block ||= lambda {|x|x}
         operator o
         priority p do
-            match(same, o, higher) { |a,_,b| a.is_a?(clazz) ? a << yield b : clazz.new([yield a, yield b]) }
+            match(same, o, higher) { |a,_,b| a.is_a?(clazz) ? a << block.call(b) : clazz.new([block.call(a), block.call(b)]) }
         end
     end
             
@@ -83,3 +97,4 @@ class String
         $parser.parse self
     end
 end
+
