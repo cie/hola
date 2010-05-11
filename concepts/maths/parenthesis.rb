@@ -18,6 +18,13 @@ class ParenthesisExpr < UnaryExpr
             match("(", expr, ")") { |_,x,_| ParenthesisExpr.new(x) }
         end
     end
+
+    typesetter do |app|
+        app.para "("
+        @val.typeset app
+        app.para ")"
+    end
+        
         
 end
 

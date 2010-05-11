@@ -22,6 +22,10 @@ class VariableExpr < NullaryExpr
         end
     end
 
+    typesetter do |app|
+        app.para @name, :emphasis=>:italic
+    end
+
 end
 
 

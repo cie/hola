@@ -19,6 +19,10 @@ class IntegerExpr < NullaryExpr
         end
     end
 
+    typesetter do |app|
+        app.para @val
+    end
+
 end
 
 

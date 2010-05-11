@@ -22,6 +22,13 @@ class EquationExpr < BinaryExpr
         binary_operator(30, '==') {|a,b| EquationExpr.new a,b,true}
         binary_operator(30, '!=') {|a,b| EquationExpr.new a,b,false}
     end
+
+    typesetter do |app|
+        @a.typeset app
+        app.para stands ? "=" : "≠"
+        @b.typeset app
+    end
+        
 end
 
 

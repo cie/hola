@@ -1,6 +1,8 @@
 require "expr/expr.rb"
+require "parser/grammar.rb"
 require "parser/parser.rb"
 require "profile/profile.rb"
+require "typesetter/typesetter.rb"
 #require "transform/
 
 concepts = Dir.glob("concepts/**/*.rb")
