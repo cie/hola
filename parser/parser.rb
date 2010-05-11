@@ -75,14 +75,14 @@ class Parser < RDParser
     def prefix_operator p, o, &block
         operator o
         priority p do
-            match(o, higher) {|_,b| block.call b}
+            match(o, same) {|_,b| block.call b}
         end
     end
 
-    def nary_operator p, o, clazz, &block
+    def nary_operator p, o, clazz, &block # {|a,b| a.is_a?(MyselfExpr) ? a << b : MyselfExpr.new a,b}
         operator o
         priority p do
-            match(same, o, higher) { |a,_,b| a.is_a?(clazz) ? a << block.call(b) : clazz.new([block.call(a), block.call(b)]) }
+            match(same, o, higher) { |a,_,b| block.call a,b }
         end
     end
             

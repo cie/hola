@@ -10,6 +10,10 @@ class EquationExpr < BinaryExpr
         "#{@a}#{operator}#{@b}"
     end
 
+    def inspect
+        "#{@a.inspect}#{operator}#{@b.inspect}"
+    end
+
     def operator
         @stands ? "==" : "!="
     end

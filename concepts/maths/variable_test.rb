@@ -31,10 +31,7 @@ describe VariableExpr do
             "Hello".to_expr.should_not == "hello".to_expr 
         end
 
-        it "does no canonization" do
-            "a".to_expr.canonize.should == "a".to_expr
-            "hello".to_expr.canonize.should == "hello".to_expr
-        end
+        it "does no canonization" 
 
     end
 

@@ -8,6 +8,10 @@ class ParenthesisExpr < UnaryExpr
         %{(#{@val})}
     end
 
+    def inspect
+        %{(#{@val.inspect})}
+    end
+
     grammar do
         operator "(", ")"
         priority 100 do

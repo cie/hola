@@ -1,4 +1,5 @@
-files = Dir.glob("concepts/**/*.rb")
+require "loader.rb"
+
 tests = Dir.glob("concepts/**/*_test.rb")
 
 tests.each do |x|

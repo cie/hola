@@ -28,9 +28,7 @@ describe IntegerExpr do
     end
 
     describe "as a canonizer extension" do
-        it "does no canonization" do
-            "3".to_expr.canonize.should == "3".to_expr
-        end
+        it "does no canonization" 
     end
 
     describe "as a typesetter extension" do

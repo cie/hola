@@ -8,7 +8,6 @@ tests = Dir.glob("**/*_test.rb")
 
 expr_classes = []
 (concepts-tests).each do |x|
-    p x
     require x
     x =~ /.*\/(.*)\.rb/
     expr_classes << eval($1.capitalize + "Expr")

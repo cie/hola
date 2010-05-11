@@ -11,6 +11,10 @@ class VariableExpr < NullaryExpr
         @name
     end
 
+    def inspect
+        @name
+    end
+
     grammar do
         token(/[a-zA-Z]+/) {|m| VariableExpr.new m }
         priority 100 do
