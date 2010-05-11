@@ -5,7 +5,7 @@ exprs = %w{ addition equation integer parenthesis variable }
 exprclasses = []
 
 exprs.each do |x|
-    require "maths/#{x}.rb"
+    require "concepts/#{x}.rb"
     exprclasses << eval(x.capitalize + 'Expr') 
 end
 

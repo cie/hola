@@ -7,7 +7,7 @@ class Parser < RDParser
         super() {}
         @priorities = {}
 
-        # execute grammars
+        # execute grammars (execute tokens, collect operators)
         exprclasses.each do |x|
             if x.grammar.arity.zero?
                 instance_exec &x.grammar
@@ -19,7 +19,7 @@ class Parser < RDParser
         # ignore whitespace
         token(/\s+/) 
 
-        # execute priorites
+        # execute operators
         @priorities.keys.sort.each_with_index do |p,i|
             @i = i
             rule same do
@@ -92,9 +92,4 @@ end
 
 
 
-class String
-    def to_expr
-        $parser.parse self
-    end
-end
 
