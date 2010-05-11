@@ -12,16 +12,8 @@ class BinaryExpr
 end
 
 class NaryExpr
-    grammar do
-        nary_operator(subclass.priority, subclass.plus, subclass) {|a,b| a.is_a?(subclass) ? a << b : subclass.new([a,b]) }
+    grammar do |subclass|
+        nary_operator(subclass.priority, subclass.plus) {|a,b| a.is_a?(subclass) ? a << b : subclass.new([a,b]) }
     end
 end
 
-class AdditiveExpr
-    grammar do |subclass|
-        prefix_operator(subclass.sign_priority, subclass.plus) {|x| subclass.new([[true ,x]])}
-        prefix_operator(subclass.sign_priority, subclass.minus) {|x| subclass.new([[false,x]])}
-        nary_operator(subclass.priority, subclass.plus, subclass) {|a,b| a.is_a?(subclass) ? a << [true, b] : subclass.new([[true,a], [true,b]])}
-        nary_operator(subclass.priority, subclass.minus, subclass) {|a,b| a.is_a?(subclass) ? a << [false, b] : subclass.new([[true,a], [false,b]])}
-    end
-end

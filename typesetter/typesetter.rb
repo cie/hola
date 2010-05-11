@@ -13,17 +13,4 @@ class Expr
 
 end
 
-class AdditiveExpr
-    typesetter do |app|
-        val.enum_with_index do |x,i|
-            if x[0]
-                app.para self.class.plus if i>0 
-            else
-                app.para self.class.minus
-            end
-            x[1].typeset app
-        end
-    end
-
-end
 
