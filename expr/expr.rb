@@ -40,6 +40,10 @@ class NaryExpr < Expr
         self
     end
 
+    def permute p
+        @val.permute p
+    end
+
 end
 
 

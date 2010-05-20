@@ -19,8 +19,8 @@ class IntegerExpr < NullaryExpr
         end
     end
 
-    typesetter do |app|
-        app.para @val
+    typesetter do
+        mn @val
     end
 
 end

@@ -19,10 +19,10 @@ class ParenthesisExpr < UnaryExpr
         end
     end
 
-    typesetter do |app|
-        app.para "("
-        @val.typeset app
-        app.para ")"
+    typesetter do
+        mo "("
+        mx @val
+        mo ")"
     end
         
         

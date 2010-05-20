@@ -2,6 +2,7 @@ require "expr/expr.rb"
 require "parser/grammar.rb"
 require "parser/parser.rb"
 require "profile/profile.rb"
+require "typesetter/mathml.rb"
 require "typesetter/typesetter.rb"
 #require "transform/
 

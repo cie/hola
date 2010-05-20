@@ -15,20 +15,20 @@ class EquationExpr < BinaryExpr
     end
 
     def operator
-        @stands ? "==" : "!="
+        @stands ? "=" : "!="
     end
 
     grammar do
-        binary_operator(30, '==') {|a,b| EquationExpr.new a,b,true}
+        binary_operator(30, '=') {|a,b| EquationExpr.new a,b,true}
         binary_operator(30, '!=') {|a,b| EquationExpr.new a,b,false}
     end
 
-    typesetter do |app|
-        @a.typeset app
-        app.para stands ? "=" : "≠"
-        @b.typeset app
+    typesetter do 
+        mx @a
+        mo @stands ? "=" : "≠"
+        mx @b
     end
-        
+
 end
 
 

@@ -8,7 +8,10 @@ Shoes.app :title=>"Hola" do
 
     def open eqn
         @win.clear do
-            eqn.to_expr.typeset self
+            e = MX.new(eqn.to_expr)
+            e.getdim!
+            e.loc=[0,0]
+            e.render self
         end
     end
 

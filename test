@@ -1,3 +1,0 @@
-#!/bin/bash
-
-spec concepts/concepts_test.rb --color

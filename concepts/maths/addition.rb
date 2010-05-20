@@ -30,21 +30,40 @@ class AdditionExpr < NaryExpr
         }
         nary_operator(50, '-') {|a,b| 
             a.is_a?(AdditionExpr) ? 
-                a << [false, b] : 
-                AdditionExpr.new([[true,a], [false,b]])
+                a << [false,b] : 
+                AdditionExpr.new([[true,a],[false,b]])
         }
     end
 
-    typesetter do |app|
-        val.enum_with_index do |x,i|
+    typesetter do 
+        @val.enum_with_index do |x,i|
             if x[0]
-                app.para self.class.plus if i>0 
+                mo '+' if i>0 
             else
-                app.para self.class.minus
+                mo "−" # minus sign u2212
             end
-            x[1].typeset app
+            mx x[1]
         end
     end
+
+=begin
+    transform do
+        commutative
+        associative
+        invertible
+    end
+
+    def invert
+        AdditionExpr.new([self], [false])
+    end
+
+    def permute p
+        super
+        @sgn.permute p
+    end
+
+=end
+
 
 end
 
