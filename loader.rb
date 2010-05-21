@@ -1,3 +1,5 @@
+require "gui/selection.rb"
+require "gui/colors.rb"
 require "expr/expr.rb"
 require "parser/grammar.rb"
 require "parser/parser.rb"

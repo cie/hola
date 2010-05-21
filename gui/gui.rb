@@ -1,8 +1,12 @@
 Dir.chdir ".."
 require "loader.rb"
 
+
 Shoes.app :title=>"Hola" do
-    
+    extend Selection
+    instance_eval &$setColors
+
+
     @win = stack
 
 
@@ -24,3 +28,5 @@ Shoes.app :title=>"Hola" do
 
     
 end
+
+

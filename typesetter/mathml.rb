@@ -14,7 +14,7 @@ UTF8REGEX = /[\x09\x0A\x0D\x20-\x7E] # ASCII
                 | \xF0[\x90-\xBF][\x80-\xBF]{2} # planes 1-3 
                 | [\xF1-\xF3][\x80-\xBF]{3} # planes 4-15 
                 | \xF4[\x80-\x8F][\x80-\xBF]{2} # plane 16 
-               /mnx 
+               /nx 
 
 class MElement
     attr_reader :dim
@@ -47,7 +47,7 @@ class MContainer < MElement
 end
 
 class MRow < MContainer
-    SPACING = 3
+    SPACING = -3
     def render app
         @elems.each{|e|e.render app}
     end
@@ -76,23 +76,40 @@ class MSimpleElement < MElement
         @val = val
     end
 
+    attr_accessor :val
+    def color
+        @color || COLORS[defaultcolor]
+    end
+
+    def color= color
+        @color = color
+        @para.style(:stroke => color)
+    end
+
     def render app
-        p [self, opts]
-        app.para @val, opts
+        @para = app.para @val, opts.merge({:stroke => color})
     end
 
     def getdim!
-        p @val.to_s.gsub(UTF8REGEX,'*')
         @dim = [@val.to_s.gsub(UTF8REGEX,'*').length * LETTER_W + MARGIN, LETTER_H] # counting chars utf8-safely
     end
 end
 
 class MI < MSimpleElement
+    def defaultcolor 
+        :id
+    end
 end
 
 class MO < MSimpleElement
+    def defaultcolor 
+        :op
+    end
 end
 
 class MN < MSimpleElement
+    def defaultcolor 
+        :num
+    end
 end
 

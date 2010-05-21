@@ -15,9 +15,26 @@ class MX < MRow
     end
     def render app
         super
-        @border = app.border app.red, opts.merge({:strokewidth => 1})
-        @border.hide
+        @hit = app.flow opts do
+            @border = app.border COLORS[:sel], :strokewidth => 1
+            @border.hide
+        end
+        @hit.hover do
+            app.select self
+        end
+        @hit.leave do
+            app.deselect self
+        end
     end
+    def select
+        @border.show
+        @elems.each{|e| e.color=COLORS[:sel] if e.is_a? MSimpleElement}
+    end
+    def deselect
+        @border.hide
+        @elems.each{|e| e.color=COLORS[e.defaultcolor] if e.is_a? MSimpleElement}
+    end
+
 end
 
 class Typesetter
