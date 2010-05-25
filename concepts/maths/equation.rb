@@ -19,14 +19,17 @@ class EquationExpr < BinaryExpr
     end
 
     grammar do
+        binary_operator(30, '==') {|a,b| EquationExpr.new a,b,true}
         binary_operator(30, '=') {|a,b| EquationExpr.new a,b,true}
         binary_operator(30, '!=') {|a,b| EquationExpr.new a,b,false}
     end
 
     typesetter do 
-        mx @a
-        mo @stands ? "=" : "≠"
-        mx @b
+        mrow do
+            expr @a
+            mo @stands ? "=" : "≠"
+            expr @b
+        end
     end
 
 end

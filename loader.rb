@@ -1,4 +1,3 @@
-require "gui/selection.rb"
 require "gui/colors.rb"
 require "expr/expr.rb"
 require "parser/grammar.rb"
@@ -6,6 +5,7 @@ require "parser/parser.rb"
 require "profile/profile.rb"
 require "typesetter/mathml.rb"
 require "typesetter/typesetter.rb"
+require "gui/selection.rb"
 #require "transform/
 
 concepts = Dir.glob("concepts/**/*.rb")

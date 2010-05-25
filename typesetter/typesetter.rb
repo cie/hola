@@ -1,5 +1,5 @@
 class Expr
-    def self.typesetter &block # { mn @val }
+    def self.typesetter &block # { mrow { mo "("; expr @val; mo ")" } }
         @typesetter = block if not block.nil?
         @typesetter || (superclass != Expr ? superclass.typesetter : lambda {|x| error("Unimplemented typesetter")})
     end
@@ -7,67 +7,57 @@ class Expr
 
 end
 
-class MX < MRow
-    def initialize expr
-        super()
-        @expr = expr
-        Typesetter.new expr, self
-    end
-    def render app
-        super
-        @hit = app.flow opts do
-            @border = app.border COLORS[:sel], :strokewidth => 1
-            @border.hide
-        end
-        @hit.hover do
-            app.select self
-        end
-        @hit.leave do
-            app.deselect self
-        end
-    end
-    def select
-        @border.show
-        @elems.each{|e| e.color=COLORS[:sel] if e.is_a? MSimpleElement}
-    end
-    def deselect
-        @border.hide
-        @elems.each{|e| e.color=COLORS[e.defaultcolor] if e.is_a? MSimpleElement}
-    end
-
-end
-
 class Typesetter
+
+    def self.typeset expr, container
+        t = self.new expr, container
+        m = t.instance_exec &expr.class.typesetter
+        m.expr = expr
+    end
+
     def initialize expr, container
         expr.instance_variables.each { |v| instance_variable_set v, expr.instance_variable_get(v) }
         @containers = [container]
-        instance_exec &expr.class.typesetter
     end
 
-
-    def mx x
-        @containers.last << MX.new(x)
+    def _msimpleelement clazz, x
+        m = clazz.new(x)
+        @containers.last << m
+        m
     end
 
     def mi x
-        @containers.last << MI.new(x)
+        _msimpleelement MI, x
     end
 
     def mn x
-        @containers.last << MN.new(x)
+        _msimpleelement MN, x
     end
 
     def mo x
-        @containers.last << MO.new(x)
+        _msimpleelement MO, x
     end
 
-    def mrow &block
-        r = MRow.new
+    def _mcontainer clazz, &block
+        r = clazz.new
         @containers.last << r
         @containers << r
         instance_exec &block
         return @containers.pop
     end
+
+    def mrow &block
+        _mcontainer MRow, &block
+    end
+
+    def mstack &block
+        _mcontainer MStack, &block
+    end
+
+    def expr x
+        self.class.typeset(x, @containers.last)
+    end
+
 
 end
 

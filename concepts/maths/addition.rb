@@ -36,13 +36,15 @@ class AdditionExpr < NaryExpr
     end
 
     typesetter do 
-        @val.enum_with_index do |x,i|
-            if x[0]
-                mo '+' if i>0 
-            else
-                mo "−" # minus sign u2212
+        mrow do
+            @val.enum_with_index do |x,i|
+                if x[0]
+                    mo '+' if i>0 
+                else
+                    mo "−" # minus sign u2212
+                end
+                expr x[1]
             end
-            mx x[1]
         end
     end
 

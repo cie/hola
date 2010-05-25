@@ -12,21 +12,18 @@ Shoes.app :title=>"Hola" do
 
     def open eqn
         @win.clear do
-            e = MX.new(eqn.to_expr)
-            e.getdim!
-            e.loc=[0,0]
-            e.render self
+            c = MCell.new
+            Typesetter.typeset eqn.to_expr, c
+            p c
+            c.getdim!
+            c.setlocdim([0,0], [width, height])
+            c.render self
         end
     end
 
 
-    if ARGV.length > 1
-        open ARGV[1]
-    else
-        open "x-3!=10"
-    end
+    open ARGV[1] || "x-3!=10 && y-3==0"
 
-    
 end
 
 

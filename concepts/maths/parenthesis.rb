@@ -20,9 +20,11 @@ class ParenthesisExpr < UnaryExpr
     end
 
     typesetter do
-        mo "("
-        mx @val
-        mo ")"
+        mrow do
+            mo "("
+            expr @val
+            mo ")"
+        end
     end
         
         

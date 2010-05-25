@@ -1,10 +1,15 @@
 =begin
+
+MathML workalike for rendering maths equations in Shoes.
+
 Rendering:
     e.getdim!
-    e.loc=[0,0]
+    e.setloc [0,0], [app.width, app.height]
     e.render app
 =end
 
+# Regex matching 1 UTF-8 character
+# Used for estimating string widths by counting characters.
 # taken from: http://www.w3.org/International/questions/qa-forms-utf-8 
 UTF8REGEX = /[\x09\x0A\x0D\x20-\x7E] # ASCII 
                 | [\xC2-\xDF][\x80-\xBF] # non-overlong 2-byte 
@@ -16,42 +21,51 @@ UTF8REGEX = /[\x09\x0A\x0D\x20-\x7E] # ASCII
                 | \xF4[\x80-\x8F][\x80-\xBF]{2} # plane 16 
                /nx 
 
+# Abstarct base class for MathML elements
 class MElement
     attr_reader :dim
-    attr_accessor :loc
+    attr_reader :loc
+    attr_reader :fill
+    attr_accessor :expr # user data field
 
-    def getdim!
-        @dim = [0,0]
-    end
+    # def getdim!
+    # def render app
 
     def opts 
+        p self
+        p [@loc, @dim]
         {:left => @loc[0], :top => @loc[1], :width=>@dim[0], :height=>@dim[1]}
     end
 
-    def render ; end
+    def setloc newloc
+        @loc = newloc
+    end
+
 end
 
 class MContainer < MElement
+    def render app
+        @elems.each{|e|e.render app}
+    end
+
     def initialize
         @elems = []
     end
 
     def << elem
         @elems << elem
+        self
     end
 
     def getdim!
         @elems.each { |x| x.getdim! }
     end
+
     
 end
 
 class MRow < MContainer
     SPACING = -3
-    def render app
-        @elems.each{|e|e.render app}
-    end
-
     def getdim!
         super
         @dim = [
@@ -60,10 +74,27 @@ class MRow < MContainer
         ]
     end
 
-    def loc= newloc
+    def setloc newloc
         super
         x = 0
-        @elems.each{|e| e.loc=[newloc[0] + x, newloc[1]]; x+=e.dim[0] + SPACING} 
+        @elems.each{|e| e.setloc([newloc[0] + x, newloc[1]]); x+=e.dim[0] + SPACING} 
+    end
+end
+
+class MCol < MContainer
+    SPACING = -3
+    def getdim!
+        super
+        @dim = [
+            @elems.map{|e|e.dim[0]}.max,
+            @elems.map{|e|e.dim[1]}.inject{|a,b|a+b} + (@elems.size-1) * SPACING,
+        ]
+    end
+
+    def setloc newloc
+        super
+        y = 0
+        @elems.each{|e| e.setloc([newloc[0], newloc[1] + y]); y+=e.dim[0] + SPACING} 
     end
 end
 
@@ -112,4 +143,46 @@ class MN < MSimpleElement
         :num
     end
 end
+
+# Resizable containers
+
+class MResizable < MContainer
+end
+
+
+class MCell < MResizable
+    def setlocdim newloc, newdim
+        e = @elems[0]
+        e.setloc([
+                 newloc[0] + [0,(newdim[0]-e.dim[0])/2].max,
+                 newloc[1] + [0,(newdim[1]-e.dim[1])].max,
+        ])
+    end
+end
+
+
+=begin
+class MStack < MCol
+    def getdim!
+        super
+        @fill = [1, @elems.inject(0){|s,e|e.fill ? s+e.fill[1] : 1}]
+    end
+
+    def setloc newloc, newdim
+        p @fill
+        ybonus = [0,newdim[0]-@dim[0]].max / @fill[1] / 2
+        y = 0
+        @elems.each do |e| 
+            e.setloc([
+                     newloc[0] + (newdim[0] - e.dim[0])/2,
+                     newloc[1] + ybonus
+            ], [
+                    newdim[0],
+                    e.dim[1] + ybonus * 2
+            ]) 
+            y+=e.dim[0] + 2*ybonus
+        end
+    end
+end
+=end
 
