@@ -13,7 +13,20 @@ class Typesetter
         t = self.new expr, container
         m = t.instance_exec &expr.class.typesetter
         m.expr = expr
+        m.extend MSelectableElement
     end
+
+    def self.typesetcell expr, container
+        m = typeset expr, []
+        unless m.is_a? MResizable
+            c = MCell.new
+            typeset expr, c
+            container << c
+        else
+            typeset expr, container
+        end
+    end
+        
 
     def initialize expr, container
         expr.instance_variables.each { |v| instance_variable_set v, expr.instance_variable_get(v) }

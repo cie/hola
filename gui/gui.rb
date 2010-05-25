@@ -9,11 +9,11 @@ Shoes.app :title=>"Hola" do
 
     @win = stack
 
-
     def open eqn
         @win.clear do
-            c = MCell.new
-            Typesetter.typeset eqn.to_expr, c
+            c = []
+            Typesetter.typesetcell eqn.to_expr, c
+            c = c.first
             p c
             c.getdim!
             c.setlocdim([0,0], [width, height])

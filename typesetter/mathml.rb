@@ -26,14 +26,15 @@ class MElement
     attr_reader :dim
     attr_reader :loc
     attr_reader :fill
-    attr_accessor :expr # user data field
+    attr_accessor :expr 
 
     # def getdim!
-    # def render app
+
+    def render app
+        @app = app
+    end
 
     def opts 
-        p self
-        p [@loc, @dim]
         {:left => @loc[0], :top => @loc[1], :width=>@dim[0], :height=>@dim[1]}
     end
 
@@ -45,6 +46,7 @@ end
 
 class MContainer < MElement
     def render app
+        super
         @elems.each{|e|e.render app}
     end
 
@@ -118,6 +120,7 @@ class MSimpleElement < MElement
     end
 
     def render app
+        super
         @para = app.para @val, opts.merge({:stroke => color})
     end
 

@@ -19,28 +19,60 @@ module Selection
 
 end
 
-class MX
+module MSelectableElement
     def render app
         super
-        @hit = app.flow opts do
-            @border = app.border COLORS[:sel], :strokewidth => 1
-            @border.hide
-        end
-        @hit.hover do
+        hit.hover do
             app.select self
         end
-        @hit.leave do
+        hit.leave do
             app.deselect self
+        end
+    end
+end
+
+class MElement
+
+    # hit area for mouse events
+    def hit
+        @hit ||= @app.flow opts do
+            @border = @app.border COLORS[:sel], :strokewidth => 1
+            @border.hide
         end
     end
 
     def select
         @border.show
-        @elems.each{|e| e.color=COLORS[:sel] if e.is_a? MSimpleElement}
     end
 
     def deselect
         @border.hide
-        @elems.each{|e| e.color=COLORS[e.defaultcolor] if e.is_a? MSimpleElement}
     end
 end
+
+class MContainer
+    def select
+        super
+        @elems.each{|e| e.color=COLORS[:sel] if !e.expr}
+    end
+
+    def deselect
+        super
+        @elems.each{|e| e.color=COLORS[e.defaultcolor] if !e.expr}
+    end
+
+end
+
+class MSimpleElement
+    def select
+        super
+        self.color=COLORS[:sel]
+    end
+
+    def deselect
+        super
+        self.color=COLORS[defaultcolor]
+    end
+
+end
+    
