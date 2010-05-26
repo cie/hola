@@ -12,9 +12,8 @@ Shoes.app :title=>"Hola" do
     def open eqn
         @win.clear do
             c = []
-            Typesetter.typesetcell eqn.to_expr, c
+            Typesetter.typesetcell eqn.to_expr, c, [MSelectableElement]
             c = c.first
-            p c
             c.getdim!
             c.setlocdim([0,0], [width, height])
             c.render self

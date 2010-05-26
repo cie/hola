@@ -26,7 +26,7 @@ class MElement
     attr_reader :dim
     attr_reader :loc
     attr_reader :fill
-    attr_accessor :expr 
+    attr_accessor :expr, :color
 
     # def getdim!
 
@@ -35,11 +35,16 @@ class MElement
     end
 
     def opts 
+        p self, @loc, @dim
         {:left => @loc[0], :top => @loc[1], :width=>@dim[0], :height=>@dim[1]}
     end
 
     def setloc newloc
         @loc = newloc
+    end
+
+    def defaultcolor
+        :normal
     end
 
 end
@@ -115,7 +120,7 @@ class MSimpleElement < MElement
     end
 
     def color= color
-        @color = color
+        super
         @para.style(:stroke => color)
     end
 
@@ -150,16 +155,61 @@ end
 # Resizable containers
 
 class MResizable < MContainer
+    def setlocdim newloc, newdim
+        setloc newloc
+        @dim = newdim
+    end
 end
 
 
 class MCell < MResizable
+    def getdim!
+        super
+        @dim = @elems[0].dim
+    end
     def setlocdim newloc, newdim
+        super
         e = @elems[0]
         e.setloc([
                  newloc[0] + [0,(newdim[0]-e.dim[0])/2].max,
-                 newloc[1] + [0,(newdim[1]-e.dim[1])].max,
+                 newloc[1] + [0,(newdim[1]-e.dim[1])/2].max,
         ])
+    end
+end
+
+class MStack < MResizable
+    def getdim!
+        super
+        @dim = [
+            @elems.map{|e|e.dim[0]}.max,
+            @elems.map{|e|e.dim[1]}.inject(0){|a,b|a+b}
+        ]
+    end
+    def setlocdim newloc, newdim
+        super
+        minw = @elems.map{|e|e.dim[0]}.max
+        minh = @elems.map{|e|e.dim[1]}.inject(0){|a,b|a+b}
+        @w = [newdim[0], minw].max
+        @h = [newdim[1], minh].max / @elems.size
+        @elems.enum_with_index do |e,i|
+            if e.is_a? MResizable
+                e.setlocdim([
+                            newloc[0],
+                            newloc[1] + @h*i,
+                ], [
+                    @w, @h
+                ])
+            else 
+                error("MStacks must contain MResizables.")
+            end
+        end
+    end
+
+    def render app
+        super
+        @lines = (1..@elems.count-1).map do |i|
+            app.line @w*0.05, @h*i, @w*0.95, @h*i, :stroke=>COLORS[:linecolor]
+        end
     end
 end
 
@@ -172,7 +222,6 @@ class MStack < MCol
     end
 
     def setloc newloc, newdim
-        p @fill
         ybonus = [0,newdim[0]-@dim[0]].max / @fill[1] / 2
         y = 0
         @elems.each do |e| 

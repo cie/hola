@@ -7,6 +7,7 @@ $setColors = proc do
         :num => black,
         :id => black,
         :sel => green,
+        :linecolor => gray,
     })
 end
 

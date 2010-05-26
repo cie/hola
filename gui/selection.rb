@@ -17,6 +17,7 @@ module Selection
         sel.select
     end
 
+
 end
 
 module MSelectableElement
@@ -36,6 +37,7 @@ class MElement
     # hit area for mouse events
     def hit
         @hit ||= @app.flow opts do
+            #@app.border @app.red, :strokewidth=>1
             @border = @app.border COLORS[:sel], :strokewidth => 1
             @border.hide
         end
@@ -76,3 +78,11 @@ class MSimpleElement
 
 end
     
+class MCell
+    def select
+        @elems[0].select
+    end
+    def deselect
+        @elems[0].deselect
+    end
+end
