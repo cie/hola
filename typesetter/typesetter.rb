@@ -75,6 +75,10 @@ class Typesetter
         _mcontainer MStack, &block
     end
 
+    def mflow &block
+        _mcontainer MFlow, &block
+    end
+
     def expr x
         self.class.typeset(x, @containers.last, @modules)
     end

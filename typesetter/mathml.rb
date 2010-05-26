@@ -214,6 +214,41 @@ class MStack < MResizable
 end
 
 
+class MFlow < MResizable
+    def getdim!
+        super
+        @dim = [
+            @elems.map{|e|e.dim[0]}.inject(0){|a,b|a+b},
+            @elems.map{|e|e.dim[1]}.max,
+        ]
+    end
+    def setlocdim newloc, newdim
+        super
+        minw = @elems.map{|e|e.dim[0]}.inject(0){|a,b|a+b}
+        minh = @elems.map{|e|e.dim[1]}.max
+        @w = [newdim[0], minw].max / @elems.size
+        @h = [newdim[1], minh].max
+        @elems.enum_with_index do |e,i|
+            if e.is_a? MResizable
+                e.setlocdim([
+                            newloc[0] + @w*i,
+                            newloc[1],
+                ], [
+                    @w, @h
+                ])
+            else 
+                error("MFlows must contain MResizables.")
+            end
+        end
+    end
+
+    def render app
+        super
+        @lines = (1..@elems.count-1).map do |i|
+            app.line @w*i, @h*0.05, @w*i, @h*0.95, :stroke=>COLORS[:linecolor]
+        end
+    end
+end
 =begin
 class MStack < MCol
     def getdim!
