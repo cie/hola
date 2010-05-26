@@ -30,6 +30,10 @@ module MSelectableElement
             app.deselect self
         end
     end
+    def update
+        super
+        hit.style opts
+    end
 end
 
 class MElement

@@ -13,15 +13,28 @@ Shoes.app :title=>"Hola" do
         @win.clear do
             c = []
             Typesetter.typesetcell eqn.to_expr, c, [MSelectableElement]
-            c = c.first
-            c.getdim!
-            c.setlocdim([0,0], [width, height])
-            c.render self
+            @m = c.first
+            @m.getdim!
+            @m.setlocdim([0,0], [width, height])
+            @m.render self
         end
     end
 
 
     open ARGV[1] || "x-3!=10 && y-3==0"
+
+    @dim = [width, height]
+    animate 1 do
+        if @dim != [width, height]
+            if @m
+                @m.getdim!
+                @m.setlocdim([0,0], [width, height])
+                @m.update
+            end
+            @dim = [width, height]
+        end 
+    end
+
 
 end
 

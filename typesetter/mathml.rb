@@ -35,7 +35,6 @@ class MElement
     end
 
     def opts 
-        p self, @loc, @dim
         {:left => @loc[0], :top => @loc[1], :width=>@dim[0], :height=>@dim[1]}
     end
 
@@ -47,6 +46,8 @@ class MElement
         :normal
     end
 
+    def update
+    end
 end
 
 class MContainer < MElement
@@ -68,6 +69,10 @@ class MContainer < MElement
         @elems.each { |x| x.getdim! }
     end
 
+    def update
+        super
+        @elems.each {|e| e.update }
+    end
     
 end
 
@@ -131,6 +136,11 @@ class MSimpleElement < MElement
 
     def getdim!
         @dim = [@val.to_s.gsub(UTF8REGEX,'*').length * LETTER_W + MARGIN, LETTER_H] # counting chars utf8-safely
+    end
+
+    def update
+        super
+        @para.style opts
     end
 end
 
@@ -207,8 +217,20 @@ class MStack < MResizable
 
     def render app
         super
-        @lines = (1..@elems.count-1).map do |i|
-            app.line @w*0.05, @h*i, @w*0.95, @h*i, :stroke=>COLORS[:linecolor]
+        @lines = (1..@elems.count-1).map {app.line(0,0,0,0)}
+        update
+    end
+
+    def update
+        super
+        @lines.each_with_index do |x,i|
+            x.style(
+                :left=>@loc[0] + @w*5/100,
+                :top=> @loc[1] + @h*(i+1), 
+                :right=> @loc[0] + @w*95/100, 
+                :bottom=> @loc[1] + @h*(i+1),
+                :stroke=>COLORS[:linecolor]
+            )
         end
     end
 end
@@ -244,8 +266,20 @@ class MFlow < MResizable
 
     def render app
         super
-        @lines = (1..@elems.count-1).map do |i|
-            app.line @w*i, @h*0.05, @w*i, @h*0.95, :stroke=>COLORS[:linecolor]
+        @lines = (1..@elems.count-1).map {app.line(0,0,0,0)}
+        update
+    end
+
+    def update
+        super
+        @lines.each_with_index do |x,i|
+            x.style(
+                :left=>@loc[0] + @w*(i+1),
+                :top=> @loc[1] + @h*5/100, 
+                :right=> @loc[0] + @w*(i+1), 
+                :bottom=> @loc[1] + @h*95/100,
+                :stroke=>COLORS[:linecolor]
+            )
         end
     end
 end
