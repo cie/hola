@@ -1,11 +1,14 @@
 
 class Expr
-    def transformations
-        @transformations ||= []
+
+    class << self
+        attr_accessor :transformations
     end
 
+    @@transformations = []
+
     def transforms(sel)
-        transformations.inject(
+        @@transformations.inject(
             [MoveTransform.new self, sel] # no-op transform
         ) do |l, tn|
             tn.transform self, sel do |t|
@@ -16,8 +19,8 @@ class Expr
 end
 
 class BinaryExpr
-    def commutative
-        BinaryCommutativity.new self.class
+    def self.commutative
+        BinaryCommutativity.new self
     end
 end
 

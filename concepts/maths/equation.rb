@@ -36,11 +36,9 @@ class EquationExpr < BinaryExpr
         end
     end
 
-    def transformations
-        @transformations ||= [
-            commutative
-        ]
-    end
+    @@transformations += [
+        commutative
+    ]
 
 
 end
