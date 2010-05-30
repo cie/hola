@@ -29,7 +29,10 @@ class AdditionExpr < NaryExpr
     
     def path= p
         @path = p
-        @val.enum_with_index{|e,i|e[V].path = p+[i]}
+        @val.enum_with_index do |e,i|
+            e[V].path = p+[i]
+            e[V].parent = self
+        end
     end
 
     def [] *p

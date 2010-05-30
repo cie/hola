@@ -11,7 +11,9 @@ end
 
 class String
     def to_expr
-        $profile.parser.parse self
+        e = $profile.parser.parse self
+        e.path = []
+        e
     end
 end
 

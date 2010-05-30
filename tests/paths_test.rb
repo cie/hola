@@ -10,7 +10,7 @@ require 'transform/manipulation.rb'
 
 describe "Paths system" do
     before do
-        @e = "1+2+3=a+b".to_expr
+        @e = "1+2+3=a+(b)".to_expr
         @e.path=[]
     end
 
@@ -23,6 +23,7 @@ describe "Paths system" do
         @e.a.val[2][AdditionExpr::V].path.should == [:a,2]
         @e.b.val[0][AdditionExpr::V].path.should == [:b,0]
         @e.b.val[1][AdditionExpr::V].path.should == [:b,1]
+        @e.b.val[1][AdditionExpr::V].val.path.should == [:b,1,nil]
     end
 
     it "can find sub-expressions by path" do
@@ -34,6 +35,18 @@ describe "Paths system" do
         @e[:a,2].should == @e.a.val[2][AdditionExpr::V]
         @e[:b,0].should == @e.b.val[0][AdditionExpr::V]
         @e[:b,1].should == @e.b.val[1][AdditionExpr::V]
+        @e[:b,1,nil].should == @e.b.val[1][AdditionExpr::V].val
+    end
+
+    it "can tell parents" do
+        @e.a.parent.should == @e
+        @e.b.parent.should == @e
+        @e.a[0].parent.should == @e.a
+        @e.a[1].parent.should == @e.a
+        @e.a[2].parent.should == @e.a
+        @e.b[0].parent.should == @e.b
+        @e.b[1].parent.should == @e.b
+        @e.b[1,nil].parent.should == @e.b[1]
     end
 
 end

@@ -61,8 +61,7 @@ describe EquationExpr do
         it "provides commutativity" do
             e = 'a+2=b'.to_expr
             e.transforms(e.a).should == [
-                Transform.new('a+2=b'.to_expr, 'a+2'.to_expr, :nop),
-                Transform.new('b=a+2'.to_expr, 'a+2'.to_expr, :move),
+                MoveTransform.new('a+2=b'.to_expr, 'a+2'.to_expr),
             ]
         end
         it "provides compatibility with adition"

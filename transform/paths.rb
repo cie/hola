@@ -1,6 +1,8 @@
 
 class Expr
     attr_accessor :path
+    attr_accessor :parent
+
 
 
     def [] *p
@@ -12,12 +14,13 @@ class UnaryExpr
     def path= p
         super
         @val.path = p+[nil]
+        @val.parent = self
     end
     def [] *p
         if p.empty?
             self
         else
-            @var[*p[1..-1]] if p.first.nil?
+            @val[*p[1..-1]] if p.first.nil?
         end
     end
 end
@@ -27,6 +30,8 @@ class BinaryExpr
         super
         @a.path = p+[:a]
         @b.path = p+[:b]
+        @a.parent = self
+        @b.parent = self
     end
     def [] *p
         if p.empty?
@@ -44,7 +49,10 @@ end
 class NaryExpr
     def path= p
         super
-        @val.enum_with_index {|e,i|e.path = p+[i]}
+        @val.enum_with_index do |e,i|
+            e.path = p+[i]
+            e.parent = self
+        end
     end
     def [] *p
         if p.empty?
