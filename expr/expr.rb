@@ -2,6 +2,7 @@ class Expr
     def == other
         other.is_a? self.class
     end
+
 end
 
 class NullaryExpr < Expr

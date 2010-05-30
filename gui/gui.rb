@@ -4,20 +4,22 @@ require "loader.rb"
 
 Shoes.app :title=>"Hola" do
     extend SelectionGUI
+    extend TransformationGUI
     instance_eval &$setColors
 
 
     @win = stack
 
-    def open eqn
-        @expr = eqn.to_expr
+    def open expr
+        @expr = expr
         @win.clear do
-            @expr.typeset self, @win, [MSelectableElement]
+            @m = expr.typeset self, [width, height], [MSelectableElement]
         end
+        @sels = []
     end
 
 
-    open ARGV[1] || "x-3!=10 && y-3==0"
+    open (ARGV[1] || "x-3!=10 && y-3==0").to_expr
 
     @dim = [width, height]
     animate 1 do

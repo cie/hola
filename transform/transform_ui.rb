@@ -1,0 +1,65 @@
+
+module Vector
+    def + other
+        zip(other).map{|a,b|a+b}.extend Vector
+    end
+    def - other
+        zip(other).map{|a,b|a-b}.extend Vector
+    end
+    def l2
+        self[0]**2+self[1]**2
+    end
+    def / num
+        map{|x|x/num.to_f}.extend Vector
+    end
+end
+
+class MElement
+    def center
+        loc.extend(Vector) + dim.extend(Vector) / 2
+    end
+end
+
+class Transform
+    #def color
+    #def spot
+    def spot
+        @spot
+    end
+
+    def typeset app, dim
+        m = display.typeset app, dim, []
+        s = [0,0].extend(Vector)
+        targets.each do |t|
+            mt = m[*t.path]
+            mt.selcolor = color
+            mt.select
+            s += mt.center
+        end
+        m.hit.motion do |x,y|
+            app.findTransform [x,y]
+        end
+        m.hit.release do
+            app.finishTransformation
+        end
+        @spot = s / targets.size
+    end
+end
+
+class MoveTransform
+    def color
+        COLORS[:sel]
+    end
+end
+
+class CopyTransform
+    def color
+        COLORS[:copy]
+    end
+end
+
+class SimplifyTransform
+    def color
+        COLORS[:simplify]
+    end
+end

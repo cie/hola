@@ -32,6 +32,11 @@ class MElement
 
     def render app
         @app = app
+        @hit = app.flow opts do
+            #@app.border @app.red, :strokewidth=>1
+            @border = @app.border COLORS[:sel], :strokewidth => 1
+            @border.hide
+        end
     end
 
     def opts 
@@ -47,7 +52,26 @@ class MElement
     end
 
     def update
+        hit.style opts
     end
+
+    # hit area for mouse events
+    def hit
+        @hit
+    end
+
+    def select
+        @border.show
+    end
+
+    def deselect
+        @border.hide
+    end
+
+    def selcolor= color
+        @border.style :stroke=>color
+    end
+
 end
 
 class MContainer < MElement
@@ -59,6 +83,7 @@ class MContainer < MElement
     def initialize
         @elems = []
     end
+    attr_reader :elems
 
     def << elem
         @elems << elem

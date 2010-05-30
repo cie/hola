@@ -4,12 +4,12 @@ class Expr
         @typesetter || (superclass != Expr ? superclass.typesetter : lambda {|x| error("Unimplemented typesetter")})
     end
 
-    def typeset app, container, modules
+    def typeset app, dim, modules
         c = []
-        Typesetter.typesetcell eqn.to_expr, c, modules
+        Typesetter.typesetcell self, c, modules
         m = c.first
         m.getdim!
-        m.setlocdim([0,0], [container.width, container.height])
+        m.setlocdim([0,0], dim)
         m.render app
         m
     end
@@ -35,7 +35,7 @@ class Typesetter
             c << m
             container << c
             modules.each {|x| m.extend x}
-            c
+            m
         else
             container << m
             #modules.each {|x| m.extend x}
@@ -90,16 +90,42 @@ class Typesetter
 
     def expr x
         m = self.class.typeset(x, @containers.last, @modules)
-        m.path = x.path
+        @containers.last.subexprs[x.path.last] = m
         m
     end
 
     def cell_expr x
         m = self.class.typesetcell(x, @containers.last, @modules)
-        m.path = x.path
+        @containers.last.subexprs[x.path.last] = m
         m
     end
 
+end
+
+
+class MElement
+    def path
+        expr.path
+    end
+
+    def subexprs
+        @subexprs ||= {}
+    end
+
+    def [] *path
+        if path.empty?
+            self
+        else
+            subexprs[path[0]][*path[1..-1]]
+        end
+    end
+
+end
+
+class MCell
+    def [] *path
+        @elems[0][*path]
+    end
 end
 
 

@@ -6,7 +6,11 @@ require "profile/profile.rb"
 require "typesetter/mathml.rb"
 require "typesetter/typesetter.rb"
 require "transform/paths.rb"
+require "transform/manipulation.rb"
+require "transform/transform.rb"
+require "transform/transform_ui.rb"
 require "gui/selection.rb"
+require "gui/transformation.rb"
 #require "transform/
 
 concepts = Dir.glob("concepts/**/*.rb")

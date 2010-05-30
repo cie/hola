@@ -8,6 +8,8 @@ $setColors = proc do
         :id => black,
         :sel => green,
         :linecolor => gray,
+        :copy => navy,
+        :simplify => red,
     })
 end
 

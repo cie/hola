@@ -62,7 +62,9 @@ describe EquationExpr do
             e = 'a+2=b'.to_expr
             e.transforms(e.a).should == [
                 MoveTransform.new('a+2=b'.to_expr, 'a+2'.to_expr),
+                MoveTransform.new('b=a+2'.to_expr, 'a+2'.to_expr),
             ]
+            e.should == 'a+2=b'.to_expr
         end
         it "provides compatibility with adition"
     end

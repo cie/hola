@@ -29,30 +29,17 @@ module MSelectableElement
         hit.leave do
             app.deselect self
         end
+        hit.click do
+            begin
+                app.startTransformation if self == app.sel
+            rescue
+                puts $!, $!.backtrace
+            end
+        end
     end
     def update
         super
         hit.style opts
-    end
-end
-
-class MElement
-
-    # hit area for mouse events
-    def hit
-        @hit ||= @app.flow opts do
-            #@app.border @app.red, :strokewidth=>1
-            @border = @app.border COLORS[:sel], :strokewidth => 1
-            @border.hide
-        end
-    end
-
-    def select
-        @border.show
-    end
-
-    def deselect
-        @border.hide
     end
 end
 

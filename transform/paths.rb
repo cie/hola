@@ -58,8 +58,11 @@ class NaryExpr
         if p.empty?
             self
         else
+            Kernel::p p
             @val[p.first][*p[1..-1]]
         end
     end
 end
+
+
 

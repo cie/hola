@@ -43,7 +43,9 @@ module Lovely
                         $modules[c].class_eval <<EOT
                             def #{m} *args, &block
                                 #p [self, :#{m}, args, block]
-                                $good_methods << [self.class,:#{m}]
+                                c = self.class
+                                c = c.superclass while !$methods.include? [c,:#{m}]
+                                $good_methods << [c,:#{m}]
                                 super
                             end
 EOT

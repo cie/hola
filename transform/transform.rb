@@ -5,11 +5,13 @@ class Expr
     end
 
     def transforms(sel)
-        transformations.inject([]) do |l, tn|
+        transformations.inject(
+            [MoveTransform.new self, sel] # no-op transform
+        ) do |l, tn|
             tn.transform self, sel do |t|
                 l << t
             end
-        end
+        end 
     end
 end
 
@@ -41,7 +43,7 @@ class BinaryCommutativity < Transformation
     end
 end
 
-class Transform < Struct.new(:expr, :targets, :result)
+class Transform < Struct.new(:display, :targets, :result)
     #def targets
     #def result
 
