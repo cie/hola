@@ -5,6 +5,7 @@ require "parser/parser.rb"
 require "profile/profile.rb"
 require "typesetter/mathml.rb"
 require "typesetter/typesetter.rb"
+require "transform/paths.rb"
 require "gui/selection.rb"
 #require "transform/
 

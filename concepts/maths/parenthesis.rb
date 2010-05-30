@@ -1,9 +1,4 @@
 class ParenthesisExpr < UnaryExpr
-    def initialize val
-        @val = val
-    end
-    attr_reader :val
-
     def to_s
         %{(#{@val})}
     end

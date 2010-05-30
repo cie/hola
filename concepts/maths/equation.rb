@@ -5,6 +5,10 @@ class EquationExpr < BinaryExpr
         @stands = stands
     end
     attr_reader :stands
+    def == other
+        super and other.stands == @stands
+    end
+    
 
     def to_s
         "#{@a}#{operator}#{@b}"
@@ -30,6 +34,12 @@ class EquationExpr < BinaryExpr
             mo @stands ? "=" : "≠"
             expr @b
         end
+    end
+
+    def transformations
+        @transformations ||= [
+            commutative
+        ]
     end
 
 end

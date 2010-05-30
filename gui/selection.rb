@@ -1,4 +1,4 @@
-module Selection
+module SelectionGUI
     def sel
         @sels.last if @sels
     end

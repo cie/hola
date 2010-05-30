@@ -6,6 +6,9 @@ class VariableExpr < NullaryExpr
         @name = name
     end
     attr_reader :name
+    def == other
+        super and @name == other.name
+    end
 
     def to_s
         @name

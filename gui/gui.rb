@@ -3,7 +3,7 @@ require "loader.rb"
 
 
 Shoes.app :title=>"Hola" do
-    extend Selection
+    extend SelectionGUI
     instance_eval &$setColors
 
 

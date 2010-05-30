@@ -3,6 +3,9 @@ class IntegerExpr < NullaryExpr
         @val = val
     end
     attr_reader :val
+    def == other
+        super and @val == other.val
+    end
 
     def to_s
         @val.to_s
