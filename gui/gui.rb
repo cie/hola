@@ -10,13 +10,9 @@ Shoes.app :title=>"Hola" do
     @win = stack
 
     def open eqn
+        @expr = eqn.to_expr
         @win.clear do
-            c = []
-            Typesetter.typesetcell eqn.to_expr, c, [MSelectableElement]
-            @m = c.first
-            @m.getdim!
-            @m.setlocdim([0,0], [width, height])
-            @m.render self
+            @expr.typeset self, @win, [MSelectableElement]
         end
     end
 

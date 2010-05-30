@@ -4,6 +4,15 @@ class Expr
         @typesetter || (superclass != Expr ? superclass.typesetter : lambda {|x| error("Unimplemented typesetter")})
     end
 
+    def typeset app, container, modules
+        c = []
+        Typesetter.typesetcell eqn.to_expr, c, modules
+        m = c.first
+        m.getdim!
+        m.setlocdim([0,0], [container.width, container.height])
+        m.render app
+        m
+    end
 
 end
 
@@ -80,11 +89,15 @@ class Typesetter
     end
 
     def expr x
-        self.class.typeset(x, @containers.last, @modules)
+        m = self.class.typeset(x, @containers.last, @modules)
+        m.path = x.path
+        m
     end
 
     def cell_expr x
-        self.class.typesetcell(x, @containers.last, @modules)
+        m = self.class.typesetcell(x, @containers.last, @modules)
+        m.path = x.path
+        m
     end
 
 end
