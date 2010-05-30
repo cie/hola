@@ -1,3 +1,3 @@
 #!/bin/bash
 
-spec tests/concepts_test.rb --color
+spec tests/tests.rb --color
