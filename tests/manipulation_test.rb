@@ -2,7 +2,7 @@
 describe "Expression manipulation system" do
     before do
         @e = "1+2+3=a+b".to_expr
-        @e.path=[]
+        @e2 = "a=b&&c=d".to_expr
     end
 
     it "can clone expressions correctly" do
@@ -16,6 +16,17 @@ describe "Expression manipulation system" do
         @e[:a,2].should_not.equal? f[:a,2]
         @e[:b,0].should_not.equal? f[:b,0]
         @e[:b,1].should_not.equal? f[:b,1]
+
+        f2=@e2.clone
+        @e2.should.equal? @e2
+        @e2.should_not.equal? f2
+        @e[0].should_not.equal? f[0]
+        @e[1].should_not.equal? f[1]
+        @e[0,:a].should_not.equal? f[0,:a]
+        @e[0,:b].should_not.equal? f[0,:b]
+        @e[1,:a].should_not.equal? f[1,:a]
+        @e[1,:b].should_not.equal? f[1,:b]
+
     end
 
     it "can swap binary expressions" do
@@ -41,6 +52,11 @@ describe "Expression manipulation system" do
         f.swap
         f.should == "a+b=1+2+3".to_expr
         @e.should == "1+2+3=a+b".to_expr
+
+        f2 = @e2.clone
+        f2[0].swap
+        f2.should == "b=a&&c=d".to_expr
+        @e2.should == "a=b&&c=d".to_expr
     end
 
 
