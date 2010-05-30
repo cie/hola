@@ -5,9 +5,9 @@ class Expr
     end
 
     def transforms(sel)
-        transformations.each do |t|
-            t.transform self, sel do
-
+        transformations.inject([]) do |l, tn|
+            tn.transform self, sel do |t|
+                l << t
             end
         end
     end
@@ -15,7 +15,7 @@ end
 
 class BinaryExpr
     def commutative
-        BinayCommutativity.new self.class
+        BinaryCommutativity.new self.class
     end
 end
 
@@ -34,7 +34,7 @@ class BinaryCommutativity < Transformation
         super
         if sel.parent.is_a? @exprclass
             e = expr.clone
-            t = e[sel.path]
+            t = e[*sel.path]
             t.parent.swap
             yield MoveTransform.new(e, t)
         end
