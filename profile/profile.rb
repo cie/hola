@@ -1,12 +1,15 @@
 
 class Profile
-    def initialize expr_classes, transform_classes
+    def initialize expr_classes
         @expr_classes = expr_classes
-        @transform_classes = transform_classes
         @parser = Parser.new *expr_classes
+        @transformations = expr_classes.inject([]) do |l,c|
+            c.transformations ? l + c.transformations : l
+        end
     end
 
-    attr_reader :parser, :expr_classes, :transform_classes
+
+    attr_reader :parser, :expr_classes, :transformations
 end
 
 class String

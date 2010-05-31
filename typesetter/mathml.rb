@@ -31,10 +31,9 @@ class MElement
     # def getdim!
 
     def render app
-        @app = app
         @hit = app.flow opts do
-            #@app.border @app.red, :strokewidth=>1
-            @border = @app.border COLORS[:sel], :strokewidth => 1
+            #app.border app.red, :strokewidth=>1
+            @border = app.border COLORS[:sel], :strokewidth => 1
             @border.hide
         end
     end
@@ -76,8 +75,9 @@ end
 
 class MContainer < MElement
     def render app
-        super
         @elems.each{|e|e.render app}
+        # hit must be drawn after children's hit, to provide correct order in events:
+        super 
     end
 
     def initialize

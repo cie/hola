@@ -6,7 +6,7 @@ describe "Expression manipulation system" do
     end
 
     it "can clone expressions correctly" do
-        f=@e.clone
+        f=@e.deep_clone
         @e.should.equal? @e
         @e.should_not.equal? f
         @e[:a].should_not.equal? f[:a]
@@ -17,7 +17,7 @@ describe "Expression manipulation system" do
         @e[:b,0].should_not.equal? f[:b,0]
         @e[:b,1].should_not.equal? f[:b,1]
 
-        f2=@e2.clone
+        f2=@e2.deep_clone
         @e2.should.equal? @e2
         @e2.should_not.equal? f2
         @e[0].should_not.equal? f[0]
@@ -48,12 +48,12 @@ describe "Expression manipulation system" do
     end
 
     it "can manipulate clones of expressions" do
-        f = @e.clone
+        f = @e.deep_clone
         f.swap
         f.should == "a+b=1+2+3".to_expr
         @e.should == "1+2+3=a+b".to_expr
 
-        f2 = @e2.clone
+        f2 = @e2.deep_clone
         f2[0].swap
         f2.should == "b=a&&c=d".to_expr
         @e2.should == "a=b&&c=d".to_expr

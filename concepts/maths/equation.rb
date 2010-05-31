@@ -36,10 +36,9 @@ class EquationExpr < BinaryExpr
         end
     end
 
-    @@transformations += [
-        commutative
+    transformations [
+        commutative,
     ]
-
 
 end
 

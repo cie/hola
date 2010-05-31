@@ -1,3 +1,4 @@
+# entry point of the application
 Dir.chdir ".."
 require "loader.rb"
 

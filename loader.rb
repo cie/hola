@@ -23,5 +23,5 @@ expr_classes = []
     expr_classes << eval($1.capitalize + "Expr")
 end
 
-$profile = Profile.new expr_classes, []
+$profile = Profile.new expr_classes
 
