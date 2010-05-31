@@ -22,25 +22,12 @@ class Expr
     end
 end
 
-class BinaryExpr
-    def self.commutative
-        BinaryCommutativity.new self
-    end
-end
-
 
 class Transformation
     def initialize exprclass
         @exprclass = exprclass
     end
-    def transform expr, sel, &block
-        if qualify(expr, sel)
-            e = expr.deep_clone
-            t = e[*sel.path]
-            do_transform e, t
-            yield transform_class.new(e, t)
-        end
-    end
+
 end
 
 module MoveTransformation
@@ -49,34 +36,19 @@ module MoveTransformation
     end
 end
 
-module SingleFeature
-    def initialize exprclass
-        @exprclass = exprclass
-    end
-end
 
-class BinaryCommutativity < Transformation
-    include MoveTransformation
-    include SingleFeature
-    def qualify e,s
-        s.parent.is_a? @exprclass
-    end
-    def do_transform e,s
-        s.parent.swap
-    end
-end
 
-class Transform < Struct.new(:display, :targets, :result)
-    #def targets
-    #def result
-
+class Transform < Struct.new(:display, :targets, :selected, :result)
+    # display is what you see
+    # targets are whose centers are averaged
+    # selected are the subexpressions which get highlighted
+    # result is what the equation will become
 end
 
 class MoveTransform < Transform
     def initialize result, target
-        super result, [target], result
+        super result, [target], [target], result
     end
-
 end
 
 class CopyTransform < Transform

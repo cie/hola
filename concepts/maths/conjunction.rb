@@ -23,6 +23,11 @@ class ConjunctionExpr < NaryExpr
         end
     end
 
+    transformations [
+        commutative,
+    ]
+
+
 end
 
 

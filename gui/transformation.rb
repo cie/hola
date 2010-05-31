@@ -5,6 +5,7 @@ module TransformationGUI
         s = @expr[*sel.path]
         @transforms = @expr.transforms(s)
         @displays = {}
+        @transform = nil
         @win.clear do
             @transforms.each do |t|
                 @displays[t] = flow do
@@ -12,8 +13,9 @@ module TransformationGUI
                 end
                 @displays[t].hide
             end
-            setTransform @transforms[0]
         end
+        setTransform @transforms[0]
+        p @transforms
     end
 
     def findTransform point

@@ -29,11 +29,14 @@ class Transform
 
     def typeset app, dim
         m = display.typeset app, dim, []
-        s = [0,0].extend(Vector)
-        targets.each do |t|
+        selected.each do |t|
             mt = m[*t.path]
             mt.selcolor = color
             mt.select
+        end
+        s = [0,0].extend(Vector)
+        targets.each do |t|
+            mt = m[*t.path]
             s += mt.center
         end
         m.hit.motion do |x,y|
@@ -43,6 +46,10 @@ class Transform
             app.finishTransformation
         end
         @spot = s / targets.size
+    end
+
+    def inspect
+        super+@spot.inspect
     end
 end
 
