@@ -1,3 +1,4 @@
+require "utils/debug.rb"
 require "gui/colors.rb"
 require "expr/expr.rb"
 require "parser/grammar.rb"
@@ -26,4 +27,7 @@ expr_classes = []
 end
 
 $profile = Profile.new expr_classes
+File.open "profile/default.rb" do |f| 
+    $profile.instance_eval f.read 
+end
 
