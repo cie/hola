@@ -1,5 +1,3 @@
-require 'expr/expr.rb'
-require 'parser/parser.rb'
 
 class VariableExpr < NullaryExpr
     def initialize name
@@ -28,6 +26,9 @@ class VariableExpr < NullaryExpr
     typesetter do
         mi @name
     end
+
+    features [
+    ]
 
 end
 

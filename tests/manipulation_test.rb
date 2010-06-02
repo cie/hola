@@ -48,12 +48,12 @@ describe "Expression manipulation system" do
     end
 
     it "can manipulate clones of expressions" do
-        f = @e.deep_clone
+        f = @e.deep_clone; f.path = []
         f.swap
         f.should == "a+b=1+2+3".to_expr
         @e.should == "1+2+3=a+b".to_expr
 
-        f2 = @e2.deep_clone
+        f2 = @e2.deep_clone; f2.path = []
         f2[0].swap
         f2.should == "b=a&&c=d".to_expr
         @e2.should == "a=b&&c=d".to_expr

@@ -22,6 +22,10 @@ class EquationExpr < BinaryExpr
         @stands ? "=" : "!="
     end
 
+    def deep_clone
+        self.class.new @a.deep_clone, @b.deep_clone, @stands
+    end
+
     grammar do
         binary_operator(30, '==') {|a,b| EquationExpr.new a,b,true}
         binary_operator(30, '=') {|a,b| EquationExpr.new a,b,true}
@@ -36,8 +40,9 @@ class EquationExpr < BinaryExpr
         end
     end
 
-    transformations [
-        commutative,
+    features [
+        symmetric,
+        compatible_with("AdditionExpr"),
     ]
 
 end

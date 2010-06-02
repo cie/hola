@@ -20,7 +20,7 @@ Shoes.app :title=>"Hola" do
     end
 
 
-    open (ARGV[1] || "x-a!=10 && y-3==0 && y+4+5+4+4=3").to_expr
+    open (ARGV[1] || "a+b=3 && (3+a)+(b+b)=7").to_expr
 
     @dim = [width, height]
     animate 1 do

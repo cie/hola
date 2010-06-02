@@ -23,7 +23,7 @@ class ConjunctionExpr < NaryExpr
         end
     end
 
-    transformations [
+    features [
         commutative,
     ]
 

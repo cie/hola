@@ -23,6 +23,10 @@ class DisjunctionExpr < NaryExpr
         end
     end
 
+    features [
+        commutative,
+    ]
+
 end
 
 

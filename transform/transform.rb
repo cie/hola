@@ -2,16 +2,16 @@
 class Expr
 
     class << self
-        def transformations l=nil
-            @transformations ||= []
-            @transformations += l if l
-            @transformations
+        def features l=nil
+            @features ||= []
+            @features += l if l
+            @features
         end
     end
 
 
     def transforms(sel)
-        $profile.transformations.inject(
+        tee $profile.features.inject(
             [MoveTransform.new self, sel] # no-op transform
         ) do |l, tn|
             tn.transform self, sel do |t|
@@ -28,12 +28,13 @@ class Transformation
         @exprclass = exprclass
     end
 
-end
-
-module MoveTransformation
-    def transform_class
-        MoveTransform
+    def == other
+        instance_variables.map{|k|instance_variable_get(k) == other.instance_variable_get(k)}.all?
     end
+
+    def transform expr, sel, &block
+    end
+
 end
 
 
@@ -52,6 +53,9 @@ class MoveTransform < Transform
 end
 
 class CopyTransform < Transform
+    def initialize result, source, target
+        super result, [target], [source, target], result
+    end
 end
 
 class SimplifyTransform < Transform

@@ -23,6 +23,11 @@ class UnaryExpr
             @val[*p[1..-1]] if p.first.nil?
         end
     end
+    def []= pe, c
+        @val = c if pe.nil?
+        c.parent = self
+        c.path = path + [pe]
+    end
 end
 
 class BinaryExpr
@@ -43,6 +48,13 @@ class BinaryExpr
             end
         end
     end
+    def []= pe,c
+        @a = c if pe == :a
+        @b = c if pe == :b
+        c.parent = self
+        c.path = path + [pe]
+    end
+
 
 end
 
@@ -60,6 +72,11 @@ class NaryExpr
         else
             @val[p.first][*p[1..-1]]
         end
+    end
+    def []= pe, c
+        @val[pe] = c
+        c.parent = self
+        c.path = path + [pe]
     end
 end
 

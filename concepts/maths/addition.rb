@@ -23,9 +23,9 @@ class AdditionExpr < NaryExpr
         to_s true
     end
 
-    #def each &block
-        #@val.map{|x|x[1]}.each &block
-    #end
+    def each &block
+        @val.map{|x|x[V]}.each &block
+    end
     
     def path= p
         @path = p
@@ -41,6 +41,10 @@ class AdditionExpr < NaryExpr
         else
             @val[p.first][V][*p[1..-1]]
         end
+    end
+
+    def deep_clone
+        self.class.new @val.map{|x|[x[S],x[V].deep_clone]}
     end
 
 
@@ -73,8 +77,12 @@ class AdditionExpr < NaryExpr
         end
     end
 
-    transforms = [
-        #commutative,
+    features [
+        commutative,
+        transpose { |e,other|
+            x=remove e
+            AdditionExpr.new [[!x[S],x[V]], [true, other]]
+        },
         #associative,
         #invertible,
     ]

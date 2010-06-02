@@ -15,7 +15,6 @@ module TransformationGUI
             end
         end
         setTransform @transforms[0]
-        p @transforms
     end
 
     def findTransform point

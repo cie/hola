@@ -3,6 +3,12 @@ class Expr
         other.is_a? self.class
     end
 
+    def find e, &block
+        if self == e
+            yield self
+        end
+    end
+
 end
 
 class NullaryExpr < Expr
@@ -11,6 +17,15 @@ end
 
 class CompositeExpr < Expr
     #def each &block
+
+    def find e, &block
+        if self == e
+            yield self
+        else
+            each{|x|x.find e, &block}
+        end
+    end
+
 end
 
 class UnaryExpr < CompositeExpr

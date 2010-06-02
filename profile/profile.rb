@@ -3,13 +3,18 @@ class Profile
     def initialize expr_classes
         @expr_classes = expr_classes
         @parser = Parser.new *expr_classes
-        @transformations = expr_classes.inject([]) do |l,c|
-            c.transformations ? l + c.transformations : l
+        @features = expr_classes.inject([]) do |l,c|
+            c.features ? l + c.features : l
         end
     end
 
+    def update_parser
+        @parser = Parser.new *expr_classes
+    end
 
-    attr_reader :parser, :expr_classes, :transformations
+
+
+    attr_reader :parser, :expr_classes, :features
 end
 
 class String
