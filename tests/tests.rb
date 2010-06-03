@@ -1,4 +1,4 @@
-require "utils/lovely.rb"
+require "tests/lovely.rb"
 require "loader.rb"
 
 if true

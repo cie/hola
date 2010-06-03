@@ -1,3 +1,10 @@
+class Expr
+    def self.grammar &block
+        @grammar = block if not block.nil?
+        @grammar 
+    end
+end
+
 
 class Parser < RDParser
 
@@ -7,11 +14,7 @@ class Parser < RDParser
 
         # execute grammars (execute tokens, collect operators)
         exprclasses.each do |x|
-            if x.grammar.arity.zero?
-                instance_exec &x.grammar
-            else
-                instance_exec x, &x.grammar
-            end
+            instance_exec &x.grammar
         end
 
         # ignore whitespace

@@ -4,7 +4,7 @@ MathML workalike for rendering maths equations in Shoes.
 
 Rendering:
     e.getdim!
-    e.setloc [0,0], [app.width, app.height]
+    e.setloc [0,0] *or* e.setlocdim [0,0], [w,h]
     e.render app
 =end
 

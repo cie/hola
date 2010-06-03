@@ -1,26 +1,4 @@
 
-class Expr
-
-    class << self
-        def features l=nil
-            @features ||= []
-            @features += l if l
-            @features
-        end
-    end
-
-
-    def transforms(sel)
-        tee $profile.features.inject(
-            [MoveTransform.new self, sel] # no-op transform
-        ) do |l, tn|
-            tn.transform self, sel do |t|
-                l << t
-            end
-            l
-        end 
-    end
-end
 
 
 
