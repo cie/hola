@@ -1,7 +1,7 @@
-require 'settings/settings.rb'
+require 'loader.rb'
 
 Given /^az ablakban (.*) egyenlet van$/ do |a|
-    @eqn = a.to_expr
+     @app = GUI.app a.to_expr
 end
 
 When /^kijelölöm az? (.*)[öea]?-t$/ do |a|
