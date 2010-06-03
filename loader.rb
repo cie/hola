@@ -2,6 +2,7 @@ require "utils/debug.rb"
 require "gui/colors.rb"
 require "expr/expr.rb"
 require "parser/grammar.rb"
+require "utils/rdparser.rb"
 require "parser/parser.rb"
 require "profile/profile.rb"
 require "typesetter/mathml.rb"
@@ -14,7 +15,7 @@ require "transform/features.rb"
 require "transform/transform_ui.rb"
 require "gui/selection.rb"
 require "gui/transformation.rb"
-#require "transform/
+require "gui/app.rb"
 
 concepts = Dir.glob("concepts/**/*.rb")
 tests = Dir.glob("**/*_test.rb")
