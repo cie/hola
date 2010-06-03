@@ -23,19 +23,6 @@ class Expr
 end
 
 
-class Transformation
-    def initialize exprclass
-        @exprclass = exprclass
-    end
-
-    def == other
-        instance_variables.map{|k|instance_variable_get(k) == other.instance_variable_get(k)}.all?
-    end
-
-    def transform expr, sel, &block
-    end
-
-end
 
 
 

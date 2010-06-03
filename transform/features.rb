@@ -1,3 +1,17 @@
+class Feature
+    def initialize exprclass
+        @exprclass = exprclass
+    end
+
+    def == other
+        instance_variables.map{|k|instance_variable_get(k) == other.instance_variable_get(k)}.all?
+    end
+
+    def transform expr, sel, &block
+    end
+
+end
+
 module SingleFeature
     def initialize exprclass
         @exprclass = exprclass
@@ -22,7 +36,7 @@ class BinaryExpr
     end
 end
 
-class BinaryCommutativity < Transformation
+class BinaryCommutativity < Feature
     include SingleFeature
     def transform expr, sel, &block
         if sel.parent.is_a? eval(@exprclass)
@@ -35,7 +49,7 @@ class BinaryCommutativity < Transformation
     end
 end
 
-class RelationCompatibility < Transformation
+class RelationCompatibility < Feature
     include RelativeFeature
 end
 
@@ -49,7 +63,7 @@ class NaryExpr
     end
 end
 
-class NaryCommutativity < Transformation
+class NaryCommutativity < Feature
     include SingleFeature
     def transform expr, sel, &block
         if sel.parent.is_a? eval(@exprclass)
@@ -64,7 +78,7 @@ class NaryCommutativity < Transformation
     end
 end
 
-class NaryTransposition < Transformation
+class NaryTransposition < Feature
     def initialize exprclass, &block
         @exprclass = exprclass
         @block = block
