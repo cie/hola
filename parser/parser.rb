@@ -1,4 +1,3 @@
-require "parser/rdparser.rb"
 
 class Parser < RDParser
 
