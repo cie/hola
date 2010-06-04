@@ -1,20 +1,21 @@
 
+
 class Profile
-    def initialize expr_classes
-        @expr_classes = expr_classes
-        @parser = Parser.new *expr_classes
-        @features = expr_classes.inject([]) do |l,c|
+    def initialize concepts, file=nil
+        @concepts = concepts
+        @features = concepts.inject([]) do |l,c|
             c.features ? l + c.features : l
         end
+        if file
+            File.open file do |f| 
+                instance_eval f.read 
+            end
+        end
+        @parser = Parser.new *concepts
     end
 
-    def update_parser
-        @parser = Parser.new *expr_classes
-    end
 
-
-
-    attr_reader :parser, :expr_classes, :features
+    attr_reader :parser, :concepts, :features
 end
 
 class String

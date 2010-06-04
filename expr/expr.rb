@@ -78,10 +78,6 @@ class NaryExpr < CompositeExpr
         self
     end
 
-    def permute! p
-        @val.permute! p
-    end
-
     def size
         @val.size
     end

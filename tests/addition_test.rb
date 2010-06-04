@@ -7,13 +7,13 @@ require 'concepts/maths/integer.rb'
 describe AdditionExpr do
     describe "as a nice class" do
         it "supports ==" do
-            AdditionExpr.new([true, IntegerExpr.new(5)]).should ==
-                AdditionExpr.new([true, IntegerExpr.new(5)])
-            AdditionExpr.new([true, IntegerExpr.new(5)]).should_not ==
-                AdditionExpr.new([false, IntegerExpr.new(5)])
-            AdditionExpr.new([true, IntegerExpr.new(5)]).should_not ==
-                AdditionExpr.new([true, IntegerExpr.new(6)])
-            AdditionExpr.new([true, IntegerExpr.new(5)]).should_not == nil
+            AdditionExpr.new([[true, IntegerExpr.new(5)]]).should ==
+                AdditionExpr.new([[true, IntegerExpr.new(5)]])
+            AdditionExpr.new([[true, IntegerExpr.new(5)]]).should_not ==
+                AdditionExpr.new([[false, IntegerExpr.new(5)]])
+            AdditionExpr.new([[true, IntegerExpr.new(5)]]).should_not ==
+                AdditionExpr.new([[true, IntegerExpr.new(6)]])
+            AdditionExpr.new([[true, IntegerExpr.new(5)]]).should_not == nil
         end
 
         it "provides good to_s" do

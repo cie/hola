@@ -17,6 +17,11 @@ class Expr
 
         clone
     end
+
+    def deep_clone!
+        e = deep_clone; e.path=[]
+        e
+    end
 end
 
 class Array
@@ -52,10 +57,15 @@ class BinaryExpr
 end
 
 class NaryExpr
-    def remove e
-        k = @val.delete_at e.path[-1]
+    def remove pe
+        k = @val.delete_at pe
         self.path = path
         k
+    end
+
+    def permute! p
+        @val.permute! p
+        self.path = path
     end
 end
 

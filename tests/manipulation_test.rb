@@ -3,10 +3,11 @@ describe "Expression manipulation system" do
     before do
         @e = "1+2+3=a+b".to_expr
         @e2 = "a=b&&c=d".to_expr
+        @e3 = "a=b+(1)".to_expr
     end
 
     it "can clone expressions correctly" do
-        f=@e.deep_clone
+        f=@e.deep_clone!
         @e.should.equal? @e
         @e.should_not.equal? f
         @e[:a].should_not.equal? f[:a]
@@ -17,16 +18,24 @@ describe "Expression manipulation system" do
         @e[:b,0].should_not.equal? f[:b,0]
         @e[:b,1].should_not.equal? f[:b,1]
 
-        f2=@e2.deep_clone
+        f2=@e2.deep_clone!
         @e2.should.equal? @e2
         @e2.should_not.equal? f2
-        @e[0].should_not.equal? f[0]
-        @e[1].should_not.equal? f[1]
-        @e[0,:a].should_not.equal? f[0,:a]
-        @e[0,:b].should_not.equal? f[0,:b]
-        @e[1,:a].should_not.equal? f[1,:a]
-        @e[1,:b].should_not.equal? f[1,:b]
+        @e2[0].should_not.equal? f2[0]
+        @e2[1].should_not.equal? f2[1]
+        @e2[0,:a].should_not.equal? f2[0,:a]
+        @e2[0,:b].should_not.equal? f2[0,:b]
+        @e2[1,:a].should_not.equal? f2[1,:a]
+        @e2[1,:b].should_not.equal? f2[1,:b]
 
+        f3=@e3.deep_clone!
+        @e3.should.equal? @e3
+        @e3.should_not.equal? f3
+        @e3[:a].should_not.equal? f3[:a]
+        @e3[:b].should_not.equal? f3[:b]
+        @e3[:b,0].should_not.equal? f3[:b,0]
+        @e3[:b,1].should_not.equal? f3[:b,1]
+        @e3[:b,1,nil].should_not.equal? f3[:b,1,nil]
     end
 
     it "can swap binary expressions" do
@@ -48,15 +57,22 @@ describe "Expression manipulation system" do
     end
 
     it "can manipulate clones of expressions" do
-        f = @e.deep_clone; f.path = []
+        f = @e.deep_clone!; f.path = []
         f.swap
         f.should == "a+b=1+2+3".to_expr
         @e.should == "1+2+3=a+b".to_expr
 
-        f2 = @e2.deep_clone; f2.path = []
+        f2 = @e2.deep_clone!; f2.path = []
         f2[0].swap
         f2.should == "b=a&&c=d".to_expr
         @e2.should == "a=b&&c=d".to_expr
+    end
+
+    it "can insert a new sub-expression" do
+        @e[:b] = "6".to_expr
+        @e.should == "1+2+3=6".to_expr
+        @e.b.path.should == [:b]
+        @e.b.parent.should.equal? @e
     end
 
 

@@ -1,9 +1,15 @@
 
 class Expr
-    attr_accessor :path
-    attr_accessor :parent
 
+    def path
+        @path || raise("Path unset: #{self}")
+    end
 
+    def parent
+        @parent
+    end
+
+    attr_writer :parent, :path
 
     def [] *p
         self if p.empty?

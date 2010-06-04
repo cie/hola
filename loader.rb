@@ -11,23 +11,19 @@ require "transform/manipulation.rb"
 require "transform/transform.rb"
 require "transform/permutation.rb"
 require "transform/features.rb"
+require "transform/vector.rb"
 require "transform/transform_ui.rb"
 require "gui/selection.rb"
 require "gui/transformation.rb"
 require "gui/app.rb"
 
-concepts = Dir.glob("concepts/**/*.rb")
-tests = Dir.glob("**/*_test.rb")
+concept_files = Dir.glob("concepts/**/*.rb")
 
-expr_classes = []
-(concepts-tests).each do |x|
+concepts = concept_files.map do |x|
     require x
     x =~ /.*\/(.*)\.rb/
-    expr_classes << eval($1.capitalize + "Expr")
+    eval($1.capitalize + "Expr")
 end
 
-$profile = Profile.new expr_classes
-File.open "profile/default.rb" do |f| 
-    $profile.instance_eval f.read 
-end
+$profile = Profile.new concepts, "profile/default.rb" 
 

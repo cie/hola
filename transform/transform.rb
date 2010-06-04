@@ -1,13 +1,7 @@
-
-
-
-
-
-
 class Transform < Struct.new(:display, :targets, :selected, :result)
     # display is what you see
-    # targets are whose centers are averaged
-    # selected are the subexpressions which get highlighted
+    # targets are the subexpressions whose centers are averaged
+    # selected are the subexpressions that are highlighted
     # result is what the equation will become
 end
 

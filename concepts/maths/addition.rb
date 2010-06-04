@@ -6,6 +6,12 @@ class AdditionExpr < NaryExpr
     S=0
     V=1
 
+    def initialize val
+        raise "nil subexpression: #{val.inspect}" if val.any?{|x|x[V].nil?}
+        super
+    end
+
+
     def to_s insp=false
         s=''
         val.enum_with_index do |x,i|
@@ -33,6 +39,10 @@ class AdditionExpr < NaryExpr
             e[V].path = p+[i]
             e[V].parent = self
         end
+    end
+
+    def remove pe
+        super(pe)[V]
     end
 
     def [] *p
@@ -79,9 +89,11 @@ class AdditionExpr < NaryExpr
 
     features [
         commutative,
-        transpose { |e,other|
-            x=remove e
-            AdditionExpr.new [[!x[S],x[V]], [true, other]]
+        transpose { |pe,other|
+            x = @val[pe]
+            remove pe
+            other.parent[other.path.last] = AdditionExpr.new [[!x[S],x[V]], [true, other]]
+            x[V]
         },
         #associative,
         #invertible,

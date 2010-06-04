@@ -10,8 +10,8 @@ class Expr
 
 
     def transforms(sel)
-        tee $profile.features.inject(
-            [MoveTransform.new self, sel] # no-op transform
+        $profile.features.inject(
+            [MoveTransform.new self.deep_clone!, sel] # no-op transform
         ) do |l, tn|
             tn.transform self, sel do |t|
                 l << t
@@ -63,11 +63,10 @@ class BinaryCommutativity < Feature
     include SingleFeature
     def transform expr, sel, &block
         if sel.parent.is_a? eval(@exprclass)
-            e = expr.deep_clone; e.path = []
-            t = e[*sel.path]
-            t.parent.swap
-            t.parent.path = t.parent.path
-            yield MoveTransform.new(e, t)
+            expr2 = expr.deep_clone!
+            sel2 = expr2[*sel.path]
+            sel2.parent.swap
+            yield MoveTransform.new(expr2, sel2)
         end
     end
 end
@@ -91,10 +90,9 @@ class NaryCommutativity < Feature
     def transform expr, sel, &block
         if sel.parent.is_a? eval(@exprclass)
             Permutation.jumps(sel.path.last,sel.parent.size).each do |pm|
-                expr2 = expr.deep_clone; expr2.path = [] 
+                expr2 = expr.deep_clone!
                 sel2 = expr2[*sel.path]
                 sel2.parent.permute! pm
-                sel2.parent.path = sel2.parent.path
                 yield MoveTransform.new expr2, sel2
             end
         end
@@ -108,21 +106,19 @@ class NaryTransposition < Feature
     end
     
     def transform expr, sel, &block
-        par=sel.parent
+        par = sel.parent
         return if par.nil?
-        grp=par.parent
-        grpc = grp.class
+        gpar = par.parent
+        gparc = gpar.class
         if par.is_a? eval(@exprclass)
-            if grpc.features.include? RelationCompatibility.new(grpc.inspect, @exprclass)
-                expr2 = expr.deep_clone; expr.path = []
-                sel.path
+            if gparc.features.include? RelationCompatibility.new(gparc.inspect, @exprclass)
+                expr2 = expr.deep_clone!
                 sel2 = expr2[*sel.path]
                 par2 = sel2.parent
-                grp2 = par2.parent
-                p_other = par.path[-1] == :a ? :b : :a
-                other2 = par2.instance_exec sel2, grp2[p_other], &@block
-                grp2[p_other] = other2
-                yield MoveTransform.new expr2, other2
+                gpar2 = par2.parent
+                pe_other = par.path.last == :a ? :b : :a
+                target = par2.instance_exec sel2.path.last, gpar2[pe_other], &@block
+                yield MoveTransform.new expr2, target
             end
         end
                 
@@ -145,15 +141,16 @@ class Substitution
 
     def transform expr, sel, &block
         if sel.parent.is_a? eval(@parent)
-            sel.parent.each do |s|
-                if !s.equal? sel
-                    expr.find s do |s2|
-                        if !s.equal? s2
-                            e = expr.deep_clone; e.path = [] 
-                            t = e[*s2.path]
-                            t2 = t.parent[s2.path.last] = s.deep_clone 
-                            block[CopyTransform.new e, sel, t2]
-                            p e, sel, t2, s2.path, :copied
+            sel.parent.each do |var|
+                if !var.equal? sel
+                    expr.find var do |place|
+                        if !var.equal? place
+                            expr2 = expr.deep_clone!
+                            place2 = expr2[*place.path]
+                            subs2 = sel.deep_clone
+                            place2.parent[place.path.last] = subs2
+                            block[CopyTransform.new(expr2, sel, t2)]
+                            p expr2, sel, t2, place.path, :copied
                         end
                     end
                 end
