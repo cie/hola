@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="treestyles.css" type="text/css"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!--This file has been created with toxhtml.xsl--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><title>HOLA
+fejlesztői dokumentáció</title><link rel="stylesheet" href="HOLA fejlesztői dokumentáció.html_files/treestyles.css" type="text/css"/><script type="text/javascript" src="HOLA fejlesztői dokumentáció.html_files/marktree.js"> 
+	</script></head><body><div class="basetop"><a href="#" onclick="expandAll(document.getElementById('base'))">Expand</a> -
+<a href="#" onclick="collapseAll(document.getElementById('base'))">Collapse</a></div><div id="base" class="basetext"><ul>
+	<li class="col" id="FMID_105983964FM"><div class="nodecontent" style="color:#cc3300;">HOLA<br/>fejlesztői dokumentáció</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_439334460FM"><div class="nodecontent" style="color:#990099;">Bevezetés</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1228986332FM"><div class="nodecontent">A HOLA egy interaktív algebra oktatóprogram, aminek a lényege, hogy az egérrel vonszolással lehet az egyenleteket átrendezni.</div></li>
+	<li class="basic" id="FMID_1743256730FM"><div class="nodecontent">A neve a Hands-On Learning Algebra rövidítése. Spanyolul a "¡Hola!" azt jelenti, hogy "Helló!", és spanyolban a h betű néma, tehát [ola]-nak kell ejteni.</div></li></ul></li>
+	<li class="col" id="FMID_1226877766FM"><div class="nodecontent" style="color:#990099;">Csomagok</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_43682974FM"><div class="nodecontent">A program csomagokra és alcsomagokra van osztva, ami mappákkal és fájlokkal van megoldva.</div></li>
+	<li class="basic" id="FMID_1602283205FM"><div class="nodecontent">A tervezéskor elsődleges szempont volt, hogy a matematikai fogalmak külön modulokként legyenek implementálva. Ennek megfelelően van egy API, amivel implementálni lehet ezeket a fogalmakat. Azok a csomagok, amelyek ezt az API-t biztosítják, alkotják a Könyvtárat. A concepts csomagban kapnak helyet a fogalmak definíciói. Ezen kívül pedig van a profile csomag, ami a fogalmakon végez egy szűrést, hogy csak a tanulói szintnek megfelelő fogalmak legyenek aktívak; illetve a gui csomag, ami a felhasználói felületet kezeli.</div></li>
+	<li class="col" id="FMID_1607138218FM"><div class="nodecontent" style="font-size:100%;">A könyvtár</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_7690669FM"><div class="nodecontent">A könyvtár öt csomagból áll. Az expr definiálja a matematikai kifejezéseket reprezentáló osztályok ősosztályait, amiből a concept csomagok fogják származtatni az osztályukat. A többi négy csomag mind a concepteknek tesz lehetővé bizonyos működés meghatározását. A parser csomag a bemenő adatok feldolgozását, a typesetter a képlet kirajzolását, a transform a lehetséges átalakításokat, a canonizer pedig az átalakítás utáni tisztogatásokat (pl. zárójelek kitevése).</div></li>
+	<li class="col" id="FMID_1193185007FM"><div class="nodecontent" style="color:#669900;">expr</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1424622944FM"><div class="nodecontent" style="color:#006633;">expr/expr.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1094133357FM"><div class="nodecontent">Itt van definiálva a kifejezések adatmodellje.</div></li>
+	<li class="basic" id="FMID_1999268840FM"><div class="nodecontent">Az Expression az absztrakt ősosztály. A conceptek osztályai mind a Nullary-, Unary-, Binary- vagy NaryExpr osztályokból származnak.</div></li>
+	<li class="basic" id="FMID_722642217FM"><div class="nodecontent">Az expr csomag definiálja az adattárolás módját is, amit viszont a conceptek felülírhatnak.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1032861269FM"><div class="nodecontent" style="color:#669900;">parser</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1462035050FM"><div class="nodecontent" style="color:#006633;">parser/rdparser.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_434911508FM"><div class="nodecontent"><a href="http://snippets.dzone.com/posts/show/2190">Ez egy third-party parser könyvtár innnen: http://snippets.dzone.com/posts/show/2190</a> <a href="http://snippets.dzone.com/posts/show/2190"><img src="HOLA fejlesztői dokumentáció.html_files/ilink.png" alt="User Link" style="border-width:0"/></a></div></li>
+	<li class="basic" id="FMID_360888518FM"><div class="nodecontent">Lényege, hogy deklaratíven meg kell mondani neki egyrészt a tokeneket, másrészt pedig alkifejezésenként a lehetséges illesztési szabályokat, és a szabályoknál egy blokkot, hogy milyen kifejezéssel térjen vissza, ha illeszkedik.</div></li></ul></li>
+	<li class="col" id="FMID_1598298045FM"><div class="nodecontent" style="color:#006633;">parser/parser.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1365097115FM"><div class="nodecontent">Ez az csomag teszi lehetővé a concepteknek, hogy saját szabályokat adjanak az rdparser-nek. Származtat egy osztályt az RDParserből. A concept osztályok megadhatnak egy grammar blokkot, ami ennek az osztálynak a környezetében fog lefutni. Ebben definiálhatnak tokeneket ill. szabályokat. A szabályokat prioritásuk szerint adják meg, és a Parser osztály a különböző conceptekből származó, azonos prioritású szabályokat egy alkifejezésbe teszi.</div></li>
+	<li class="basic" id="FMID_1212340699FM"><div class="nodecontent">Ezenkívül definiál segéd eljárásokat, amivel egyszerűbben lehet létrehozni az operátorokat.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1503215843FM"><div class="nodecontent" style="color:#669900;">typesetter</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_443198103FM"><div class="nodecontent" style="color:#006633;">typesetter/mathml.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_359337856FM"><div class="nodecontent">Ez egy adatszerkezet, ami a képleteket a MathML-hez hasonló felfogásban tárolja, és megjeleníti a Shoes segítségével.</div></li></ul></li>
+	<li class="col" id="FMID_1468424071FM"><div class="nodecontent" style="color:#006633;">typesetter/typesetter.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1778356079FM"><div class="nodecontent">Lehetővé teszi a concepteknek, hogy megadják, hogy hogyan kell őket átkonvertálni mathml-be. Ehhez egy DSL-t hoz létre. A conceptek typesetter blokkját egy Typesetter példányban futtatja le, úgy, hogy a concept példányváltozóit átmásolja a typesetter-be.</div></li>
+	<li class="basic" id="FMID_1027992353FM"><div class="nodecontent">Ezenkívül definiál néhány hola-specifikus segéd metódust a mathml osztályoknak.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_606495438FM"><div class="nodecontent" style="color:#669900;">transform</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1380611959FM"><div class="nodecontent" style="color:#006633;">transform/permutation.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1140146910FM"><div class="nodecontent">Egy segéd csomag permutációk kezeléséhez.</div></li></ul></li>
+	<li class="col" id="FMID_606039752FM"><div class="nodecontent" style="color:#006633;">transform/paths.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_794950046FM"><div class="nodecontent">Egy rendszer az al-kifejezések megcímzésére. Minden alkifejezésenek lesz egy path-ja, ami egy lista, és tartalmazza, hogy hogyan lehet oda eljutni. Bináris kifejezéseknél :a vagy :b, N-árisaknál az index, unárisaknál pedig nil.</div></li></ul></li>
+	<li class="col" id="FMID_841545322FM"><div class="nodecontent" style="color:#006633;">transform/manipulation.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1420861531FM"><div class="nodecontent">Definiálja a kifejezések klónozását, ill. olyan metódusokat, melyek egyszerű átalakításokat hajtanak végre a kifejezésen.</div></li></ul></li>
+	<li class="col" id="FMID_5951562FM"><div class="nodecontent" style="color:#006633;">transform/transform.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_329674893FM"><div class="nodecontent">Definiálja a Transform osztályt, ami egy (már áttranszformált) egyenletet reprezentál, amiben ki van jelölve bizonyos részkifejezés valamilyen stílussal.</div></li></ul></li>
+	<li class="col" id="FMID_1209974467FM"><div class="nodecontent" style="color:#006633;">transform/features.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_149615205FM"><div class="nodecontent">Definiálja a Feature osztályt, ami egy matematikai fogalom bizonyos tulajdonságát (és ezzel együtt a lehetséges átalakításokat) jelenti.</div></li>
+	<li class="basic" id="FMID_657260101FM"><div class="nodecontent">Definiálja a conceptek features attribútumát, ami a lehetséges Feature-ök listája.</div></li>
+	<li class="basic" id="FMID_367649845FM"><div class="nodecontent">Az Expr osztályokban segédmetódusokat hoz létre a feature-ök példányosítására.</div></li>
+	<li class="basic" id="FMID_1077790735FM"><div class="nodecontent">(A coneptek feature-jeit majd a profile fogja összegyűjteni egy globális tömbbe.)</div></li></ul></li>
+	<li class="col" id="FMID_773468434FM"><div class="nodecontent" style="color:#006633;">transform/transform_ui.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1586657928FM"><div class="nodecontent">A transzformációk megjelenítése.</div></li>
+	<li class="basic" id="FMID_774493989FM"><div class="nodecontent">Definiálja a különböző transzformációk színeit.</div></li></ul></li>
+	<li class="col" id="FMID_303434738FM"><div class="nodecontent" style="color:#006633;">transform/vector.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_913258963FM"><div class="nodecontent">Definiálja a Vector modult, amivel Array-eket lehet vektorműveletekkel ellátni.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1099219973FM"><div class="nodecontent" style="color:#669900;">canonizer</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1274871111FM"><div class="nodecontent">(Ez még nincs kész.)</div></li>
+	<li class="col" id="FMID_1010700986FM"><div class="nodecontent">A kirajzoláshoz megfelelő alakra hozza az egyenletet, pl.:</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1081037345FM"><div class="nodecontent">Ha egy kifejezésnek nála kisebb prioritású kifejezés a gyermeke, akkor zárójelet tesz.</div></li>
+	<li class="basic" id="FMID_103299854FM"><div class="nodecontent">Ha egy kifejezésnek vele azonos típusú kifejezés a gyermeke, akkor összevonja őket.</div></li>
+	<li class="basic" id="FMID_1921424310FM"><div class="nodecontent">Ha egy kifejezének csak egy eleme van, és meg lehet szüntetni, akkor megszünteti.</div></li>
+	<li class="basic" id="FMID_1751835167FM"><div class="nodecontent">Ha egy kifejezésnek nincs eleme, akkor az egységet teszi be helyette.</div></li></ul></li></ul></li></ul></li>
+	<li class="col" id="FMID_611514385FM"><div class="nodecontent" style="color:#669900;">concepts</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1565341280FM"><div class="nodecontent" style="color:#669900;">concepts/math</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_849764679FM"><div class="nodecontent" style="color:#006633;">addition.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_473509444FM"><div class="nodecontent">Összeadás, kivonás és előjel. Ez az egyik legbonyolultabb concept.</div></li>
+	<li class="basic" id="FMID_1222925093FM"><div class="nodecontent">Az adatokat, [előjel, érték] párok formájában tárolja.</div></li>
+	<li class="basic" id="FMID_92944904FM"><div class="nodecontent">Ennek megfelelően bizonyos adatkezelési metódusokat felüldefiniál.</div></li></ul></li>
+	<li class="col" id="FMID_1580066828FM"><div class="nodecontent" style="color:#006633;">conjunction.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_48635131FM"><div class="nodecontent">És.</div></li></ul></li>
+	<li class="col" id="FMID_1264165590FM"><div class="nodecontent" style="color:#006633;">disjunction.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_261589447FM"><div class="nodecontent">Vagy.</div></li></ul></li>
+	<li class="col" id="FMID_1125253709FM"><div class="nodecontent" style="color:#006633;">equation.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1412994471FM"><div class="nodecontent">Egyenő és nem egyenlő.</div></li>
+	<li class="basic" id="FMID_371631225FM"><div class="nodecontent">Az egyenlőség meglétét a @stands boolean mezőben tárolja.</div></li></ul></li>
+	<li class="col" id="FMID_287297729FM"><div class="nodecontent" style="color:#006633;">integer.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1362044985FM"><div class="nodecontent">Egész szám.</div></li></ul></li>
+	<li class="col" id="FMID_593832931FM"><div class="nodecontent" style="color:#006633;">parenthesis.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_634315669FM"><div class="nodecontent">Zárójel.</div></li></ul></li>
+	<li class="col" id="FMID_637135519FM"><div class="nodecontent" style="color:#006633;">variable.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_116550858FM"><div class="nodecontent">Változó.</div></li></ul></li></ul></li></ul></li>
+	<li class="col" id="FMID_803081057FM"><div class="nodecontent" style="color:#669900;">profile</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_712204768FM"><div class="nodecontent" style="color:#006633;">profile/profile.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1936568078FM"><div class="nodecontent">Összegyűjti a feature-öket és a concept-eket.</div></li>
+	<li class="basic" id="FMID_1741016905FM"><div class="nodecontent">Lefuttattja a megadott profil fájlt, ami le tud tiltani bizonyos feature-öket és concepteket.</div></li></ul></li>
+	<li class="col" id="FMID_773224109FM"><div class="nodecontent" style="color:#006633;">profile/default.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_565825763FM"><div class="nodecontent">Az alapértelmezett profil fájl.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_976299569FM"><div class="nodecontent" style="color:#669900;">gui</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1539586199FM"><div class="nodecontent" style="color:#006633;">gui/app.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_580420307FM"><div class="nodecontent">A GUI főprogramja.</div></li>
+	<li class="basic" id="FMID_288359183FM"><div class="nodecontent">Létrehozza az ablakot és kirajzolja a kezdeti egyenletet.</div></li>
+	<li class="basic" id="FMID_1155023624FM"><div class="nodecontent">Behívja a selection.rb-ből és a transformation.rb-ből a modulokat.</div></li></ul></li>
+	<li class="col" id="FMID_1616271869FM"><div class="nodecontent" style="color:#006633;">gui/colors.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1573454538FM"><div class="nodecontent">Definiálja az alapértelmezett színeket.</div></li></ul></li>
+	<li class="col" id="FMID_1118463889FM"><div class="nodecontent" style="color:#006633;">gui/selection.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_487145930FM"><div class="nodecontent">A kijelölést kezeli.</div></li></ul></li>
+	<li class="col" id="FMID_63484212FM"><div class="nodecontent" style="color:#006633;">gui/transformation.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_774140826FM"><div class="nodecontent">A transzformációkat kezeli a transform/transform_ui.rb csomaggal együtt.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_39576490FM"><div class="nodecontent" style="color:#006633;">loader.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1353279647FM"><div class="nodecontent">Betölti a .rb fájlokat</div></li>
+	<li class="basic" id="FMID_651683127FM"><div class="nodecontent">Betölti a concepteket</div></li>
+	<li class="basic" id="FMID_372468371FM"><div class="nodecontent">Létrehoz egy profilt az alapértelmezett profil fájllal.</div></li></ul></li>
+	<li class="col" id="FMID_741539778FM"><div class="nodecontent" style="color:#006633;">hola.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1032998544FM"><div class="nodecontent">A főprogram.</div></li>
+	<li class="basic" id="FMID_546235087FM"><div class="nodecontent">A parancsori paraméterrel meghívja a gui-t</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_89807390FM"><div class="nodecontent" style="color:#990099;">Fejlesztési segédeszközök</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_1814306919FM"><div class="nodecontent">RSpec</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_624240037FM"><div class="nodecontent" style="color:#006633;">test/*_test.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_168689277FM"><div class="nodecontent">A tesztesetek</div></li></ul></li>
+	<li class="col" id="FMID_831962024FM"><div class="nodecontent" style="color:#006633;">test/run_tests</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_83059047FM"><div class="nodecontent">Lefuttatja az összes tesztesetet.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_296339966FM"><div class="nodecontent">Lovely</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_514897137FM"><div class="nodecontent" style="color:#006633;">test/lovely.rb</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1954765941FM"><div class="nodecontent">Ellenőrzi, hogy minden metódus meg lett-e hívva a tesztelés folyamán.</div></li>
+	<li class="basic" id="FMID_93820127FM"><div class="nodecontent">Nem túl hasznos, mert a super() hívásokat még nem kapja el.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1467852106FM"><div class="nodecontent">Cucumber</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_9658977FM"><div class="nodecontent" style="color:#669900;">cucumber/</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1037737435FM"><div class="nodecontent">Működik, csak kevés teszt van, és a canonizer hiánya miatt azok sem futnak le teljesen.</div></li></ul></li></ul></li>
+	<li class="col" id="FMID_1449341084FM"><div class="nodecontent">IRB</div>
+		<ul class="subexp">
+	<li class="col" id="FMID_879528082FM"><div class="nodecontent" style="color:#006633;">shell</div>
+		<ul class="subexp">
+	<li class="basic" id="FMID_1299604092FM"><div class="nodecontent">Elindítja az IRB-t úgy, hogy betöltötte a loader.rb-t</div></li></ul></li></ul></li></ul></li></ul></li></ul></div></body></html>

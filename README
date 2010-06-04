@@ -5,4 +5,12 @@
 This is an application for learning algebra by manipulating expressions using the mouse.
 
 Prerequisites:
-    * shoes
+    * Shoes
+Recommended for development:
+    * Ruby
+    * RSpec
+    * Cucumber
+
+Developer documentation (Hungarian) in doc/hu/devdoc.html
+
+
